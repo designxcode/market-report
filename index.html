@@ -1,0 +1,4912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="市场日报">
+<title>市场日报 · 业务员端</title>
+<style>
+/* ============================================================
+   水泥市场报价系统 · 统一样式
+   设计要点：移动优先、触控友好、输入框字号 16px（iOS 不缩放）
+   ============================================================ */
+
+:root {
+    --ink: #16202c;
+    --ink-2: #33475e;
+    --muted: #6b7c93;
+    --line: #e3e9f0;
+    --line-2: #cfd8e3;
+    --bg: #f1f5f9;
+    --panel: #ffffff;
+    --brand: #0f766e;
+    --brand-dark: #115e59;
+    --brand-soft: #ecfdf5;
+    --accent: #f59e0b;
+    --up: #d92d20;
+    --down: #0b8a4b;
+    --new: #2563eb;
+    --missing: #b45309;
+    --radius: 14px;
+    --shadow-sm: 0 1px 2px rgba(16, 32, 48, .06), 0 1px 3px rgba(16, 32, 48, .08);
+    --shadow-md: 0 6px 18px rgba(16, 32, 48, .08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: 16px;
+    color: inherit;
+}
+
+a {
+    color: var(--brand);
+    text-decoration: none;
+}
+
+.wrap {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.wrap-wide {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+/* ---------------- 顶部 ---------------- */
+.hero {
+    background: linear-gradient(135deg, #0f172a 0%, #223449 55%, #0f766e 130%);
+    color: #fff;
+    padding: 26px 18px 22px;
+}
+
+.hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+.hero p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .68);
+}
+
+.hero .hero-tag {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .14);
+    font-size: 12px;
+    color: #d9f5f0;
+}
+
+/* ---------------- 卡片 ---------------- */
+.card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 14px;
+    margin: 12px 0;
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.card-head h2, .card-head h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.card-head .hint {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* ---------------- 表单 ---------------- */
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.field {
+    display: block;
+    min-width: 0;
+}
+
+.field > span, .label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.input, .select, .textarea {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    background: #fff;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.textarea {
+    height: auto;
+    min-height: 160px;
+    padding: 10px 12px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, .13);
+}
+
+.input.warn {
+    border-color: var(--accent);
+    background: #fffbeb;
+}
+
+.select {
+    padding-right: 8px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7c93' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+/* ---------------- 按钮 ---------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: #eef2f6;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .12s, background .15s, box-shadow .15s;
+    white-space: nowrap;
+}
+
+.btn:active {
+    transform: scale(.985);
+}
+
+.btn.primary {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(15, 118, 110, .22);
+}
+
+.btn.primary:hover {
+    background: var(--brand-dark);
+}
+
+.btn.ghost {
+    background: #fff;
+    border-color: var(--line-2);
+    color: var(--ink-2);
+}
+
+.btn.danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #b42318;
+}
+
+.btn.sm {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+.btn.block {
+    width: 100%;
+}
+
+.btn.big {
+    height: 50px;
+    font-size: 17px;
+    border-radius: 12px;
+}
+
+.btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.btn-icon {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid var(--line-2);
+    background: #fff;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ---------------- 分段切换 ---------------- */
+.seg {
+    display: flex;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 12px;
+    background: #e6edf5;
+    margin: 12px 0;
+}
+
+.seg-btn {
+    flex: 1;
+    height: 40px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s, box-shadow .15s;
+}
+
+.seg-btn.active {
+    background: #fff;
+    color: var(--brand);
+    box-shadow: var(--shadow-sm);
+}
+
+.count {
+    display: inline-block;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 4px;
+    border-radius: 9px;
+    background: rgba(15, 118, 110, .12);
+    color: var(--brand);
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+}
+
+/* ---------------- 地区/品牌 ---------------- */
+.region-card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.region-head {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.region-head .input {
+    height: 40px;
+    font-weight: 600;
+}
+
+.brand-card {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfcfe;
+    padding: 10px 10px 8px;
+    margin-bottom: 8px;
+}
+
+.brand-card.incomplete {
+    border-color: #fde68a;
+    background: #fffdf5;
+}
+
+.brand-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.brand-grid .span2 {
+    grid-column: span 2;
+}
+
+.brand-grid .input, .brand-grid .select {
+    height: 40px;
+    padding: 0 10px;
+    font-size: 15px;
+}
+
+.brand-del {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #b0bccb;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.brand-del:hover {
+    background: #fee2e2;
+    color: #b42318;
+}
+
+.brand-foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+.link-btn {
+    padding: 2px 4px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.link-btn:hover {
+    color: var(--up);
+}
+
+.brand-add, .region-add {
+    width: 100%;
+    height: 38px;
+    border: 1px dashed var(--line-2);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--brand);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.brand-add:hover, .region-add:hover {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+}
+
+/* ---------------- 底部固定栏 ---------------- */
+.footer-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, .94);
+    border-top: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+}
+
+.footer-meta {
+    flex: 1;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.3;
+}
+
+.footer-meta.busy {
+    color: var(--ink-2);
+    font-weight: 600;
+}
+
+.footer-meta.ok {
+    color: var(--brand);
+    font-weight: 600;
+}
+
+.footer-meta.bad {
+    color: var(--up);
+    font-weight: 600;
+}
+
+.footer-meta.warn {
+    color: #b45309;
+    font-weight: 600;
+}
+
+.footer-edit {
+    position: relative;
+    flex: 0 0 auto;
+    border: 1px solid var(--line-2);
+    background: #fff;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 9px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.edit-badge {
+    position: absolute;
+    top: -7px;
+    right: -6px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #b45309;
+    color: #fff;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+    font-weight: 700;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .16);
+}
+
+.edit-badge[hidden] {
+    display: none;
+}
+
+.footer-edit.warn {
+    border-color: #b45309;
+    background: #fffaf2;
+    color: #9a5208;
+}
+
+.footer-edit[hidden] {
+    display: none;
+}
+
+.footer-bar .btn {
+    flex: 0 0 auto;
+}
+
+/* ---------------- 预览 ---------------- */
+.preview {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+    max-height: 320px;
+    overflow: auto;
+}
+
+/* ---------------- 提示 ---------------- */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 96px;
+    transform: translate(-50%, 12px);
+    max-width: 86vw;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(22, 32, 44, .92);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    z-index: 60;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.toast.error {
+    background: rgba(180, 35, 24, .95);
+}
+
+.toast.ok {
+    background: rgba(11, 101, 68, .96);
+}
+
+.toast.warn {
+    background: rgba(180, 83, 9, .96);
+}
+
+/* ---------------- 弹层 ---------------- */
+.mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, .45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 50;
+}
+
+.mask.show {
+    display: flex;
+}
+
+.sheet {
+    width: 100%;
+    max-width: 720px;
+    max-height: 88vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+    animation: sheetIn .22s ease-out;
+}
+
+@keyframes sheetIn {
+    from { transform: translateY(18px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.sheet-head h3 {
+    font-size: 16px;
+}
+
+.sheet-foot {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* ---------------- 管理端：页签 ---------------- */
+.tabs {
+    position: sticky;
+    top: 0;
+    z-index: 12;
+    display: flex;
+    gap: 4px;
+    padding: 8px 14px 0;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab {
+    flex: 0 0 auto;
+    padding: 10px 16px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tab.active {
+    color: var(--brand);
+    border-bottom-color: var(--brand);
+}
+
+.tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 9px;
+    background: #dc2626;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 700;
+    vertical-align: 1px;
+}
+
+.notify-stack {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    width: min(360px, calc(100vw - 28px));
+    pointer-events: none;
+}
+
+.notify-card {
+    pointer-events: auto;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid #dc2626;
+    border-radius: 10px;
+    box-shadow: 0 10px 34px rgba(15, 23, 42, .18);
+    padding: 12px 14px;
+}
+
+.notify-card.auth {
+    border-left-color: #d97706;
+}
+
+.notify-card b {
+    display: block;
+    color: var(--ink);
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.notify-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+    word-break: break-word;
+}
+
+.notify-card .notify-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 9px;
+}
+
+.notify-card .notify-actions button {
+    border: none;
+    background: var(--brand);
+    color: #fff;
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.notify-card .notify-actions .quiet {
+    background: #eef2f7;
+    color: var(--muted);
+}
+
+.pane {
+    display: none;
+    padding-bottom: 40px;
+}
+
+.pane.active {
+    display: block;
+}
+
+/* ---------------- 表格 ---------------- */
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+}
+
+table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+table.data th, table.data td {
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+}
+
+table.data th {
+    background: #f8fafc;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+}
+
+table.data tr:last-child td {
+    border-bottom: none;
+}
+
+table.data td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.group-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 14px 0 6px;
+    padding-left: 8px;
+    border-left: 3px solid var(--brand);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-2);
+}
+
+/* ---------------- 徽标 ---------------- */
+.badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #eef2f6;
+    color: var(--ink-2);
+}
+
+.badge.up { background: #fef3f2; color: var(--up); }
+.badge.down { background: #ecfdf3; color: var(--down); }
+.badge.new { background: #eff6ff; color: var(--new); }
+.badge.missing { background: #fffbeb; color: var(--missing); }
+
+.delta-up { color: var(--up); font-weight: 600; }
+.delta-down { color: var(--down); font-weight: 600; }
+.delta-flat { color: var(--muted); }
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.stat {
+    flex: 1 1 100px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+}
+
+.stat b {
+    display: block;
+    font-size: 20px;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.stat.up b { color: var(--up); }
+.stat.down b { color: var(--down); }
+.stat.new b { color: var(--new); }
+.stat.missing b { color: var(--missing); }
+
+.empty {
+    padding: 34px 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.warn-box {
+    border: 1px solid #fde68a;
+    background: #fffbeb;
+    color: #92400e;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: var(--muted);
+}
+
+.status-dot.ok { background: var(--down); }
+.status-dot.over { background: var(--accent); }
+
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.grow { flex: 1 1 auto; }
+
+/* ---------------- 桌面端 ---------------- */
+@media (min-width: 760px) {
+    /* 桌面宽屏：三个一行，两行排完；标签不再换行 */
+    .brand-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px 10px;
+    }
+
+    .brand-grid .field > span {
+        white-space: nowrap;
+    }
+
+    .brand-grid .span2 {
+        grid-column: span 2;
+    }
+
+    .footer-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        box-shadow: 0 -4px 16px rgba(16, 32, 48, .06);
+    }
+
+    .sheet {
+        border-radius: 16px;
+        margin: 40px auto;
+        max-height: 84vh;
+    }
+
+    .mask {
+        align-items: center;
+    }
+}
+
+@media (max-width: 380px) {
+    .btn {
+        padding: 0 12px;
+    }
+
+    .hero h1 {
+        font-size: 19px;
+    }
+}
+
+/* ============================================================
+   管理端（PC）专用补充样式
+   ============================================================ */
+
+.admin-body {
+    background: #eef2f7;
+}
+
+/* 顶部和页签跟内容区对齐，别让标题贴着窗口左边 */
+.admin-body .hero-inner {
+    max-width: 1096px;
+}
+
+.admin-body .tabs {
+    padding: 8px max(14px, calc((100% - 1120px) / 2 + 12px)) 0;
+}
+
+/* 导入区：左边大输入框，右边格式说明 */
+.import-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+}
+
+.side-note .preview.small {
+    font-size: 12px;
+    line-height: 1.62;
+    background: #f8fafc;
+}
+
+.textarea.tall {
+    min-height: 300px;
+}
+
+.grid3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--ink-2);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--brand);
+}
+
+/* 解析结果底部动作条（PC 上不吸底，跟随内容） */
+.sticky-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 8;
+    padding: 10px 0 14px;
+    background: linear-gradient(180deg, rgba(238, 242, 247, 0) 0%, #eef2f7 34%);
+}
+
+/* 字典：三栏 */
+.dict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.dict-col {
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fbfcfe;
+}
+
+.dict-col h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.dict-col .row {
+    flex-wrap: nowrap;
+    margin-bottom: 8px;
+}
+
+.dict-col .input {
+    height: 38px;
+}
+
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: 300px;
+    overflow: auto;
+    padding: 2px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px 4px 3px 9px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: 100%;
+}
+
+.chip-name {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chip-name:hover {
+    color: var(--brand);
+}
+
+.chip-del {
+    width: 18px;
+    height: 18px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #b0bccb;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.chip-del:hover {
+    background: #fee2e2;
+    color: #b42318;
+}
+
+.chip-sep {
+    flex: 0 0 100%;
+    margin: 6px 0 2px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.warn-box.soft {
+    border-color: #dbeafe;
+    background: #f5f9ff;
+    color: #1e4e8c;
+}
+
+.warn-box code {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, .05);
+    font-size: 12px;
+}
+
+details.card > summary {
+    list-style: none;
+    margin: 0;
+}
+
+details.card > summary::-webkit-details-marker {
+    display: none;
+}
+
+details.card > summary::after {
+    content: "展开 ▾";
+    font-size: 12px;
+    color: var(--muted);
+}
+
+details.card[open] > summary::after {
+    content: "收起 ▴";
+}
+
+@media (min-width: 900px) {
+    .import-grid {
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+    }
+
+    /* 对比表格：让备注列能显示完整内容 */
+    table.cmp td {
+        white-space: normal;
+    }
+
+    table.cmp td:nth-child(8) {
+        min-width: 120px;
+        max-width: 240px;
+        font-size: 12px;
+    }
+
+    .textarea.tall {
+        min-height: 340px;
+    }
+}
+
+@media (max-width: 899px) {
+    .import-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 759px) {
+    /* 手机上第一行只放「添加地区」，其余三个按钮换到第二行，别挤成一排 */
+    #addRegion {
+        flex: 1 1 100%;
+    }
+}
+
+
+/* ---------------- 业务员端：历史对比表 ---------------- */
+.cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.cmp-table th,
+.cmp-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+}
+.cmp-table th {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    background: #f8fafc;
+}
+.cmp-table td .note { font-size: 11px; margin: 0; }
+.cmp-table tr.cmp-up { background: #fff5f5; }
+.cmp-table tr.cmp-down { background: #f2fbf6; }
+.cmp-table tr.cmp-freight { background: #fffaf0; }
+.cmp-table tr.cmp-added { background: #f3f7ff; }
+.cmp-table tr.cmp-missing { color: var(--muted); }
+
+/* ---------------- 业务员端：本次改动摘要 ---------------- */
+.revision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 48vh;
+    overflow: auto;
+}
+.revision-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfcfe;
+}
+.revision-main {
+    min-width: 0;
+}
+.revision-main b {
+    font-size: 13px;
+}
+.revision-tag {
+    flex: 0 0 auto;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.revision-tag.up { color: var(--up); background: var(--up-soft, #fff1f1); }
+.revision-tag.down { color: var(--down); background: var(--down-soft, #eefaf4); }
+.revision-tag.freight { color: #b45309; background: #fff7e8; }
+.revision-tag.added { color: var(--brand); background: var(--brand-soft); }
+.revision-tag.missing { color: var(--muted); background: #f1f4f9; }
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="hero-inner">
+        <h1>水泥市场日报</h1>
+        <p>填好价格，一键复制，直接发到微信群</p>
+        <span class="hero-tag">业务员端 v2.8.0 · 加密同步到电脑</span>
+    </div>
+</header>
+
+<main class="wrap" style="padding:0 12px 96px;">
+
+    <!-- 基本信息 -->
+    <section class="card">
+        <div class="grid2">
+            <label class="field">
+                <span>业务员姓名</span>
+                <input class="input" id="salesmanName" placeholder="例如：张三" autocomplete="off">
+            </label>
+            <label class="field">
+                <span>报告日期</span>
+                <input class="input" id="reportDate" type="date">
+            </label>
+        </div>
+    </section>
+
+    <!-- 自动带到当天提示 -->
+    <section class="card" id="carryBanner" style="display:none;">
+        <div class="row" style="justify-content:space-between;">
+            <div>
+                <div style="font-weight:600;" id="carryTitle">已自动更新到今天</div>
+                <div class="note" id="carryText" style="margin-top:4px;"></div>
+            </div>
+            <button type="button" class="btn sm ghost" id="carryClose">知道了</button>
+        </div>
+    </section>
+
+    <!-- 旧版本地数据 -->
+    <section class="card" id="legacyBanner" style="display:none;">
+        <div>
+            <div style="font-weight:600;">发现旧版本地数据</div>
+            <div class="note" id="legacyText" style="margin-top:4px;"></div>
+        </div>
+        <div class="row" style="margin-top:8px;">
+            <button type="button" class="btn sm primary" id="legacyChoose">选择带入</button>
+            <button type="button" class="btn sm ghost" id="legacySkip">先不用</button>
+        </div>
+    </section>
+
+    <!-- 产品切换 -->
+    <div class="seg" id="productSeg">
+        <button type="button" class="seg-btn active" data-product="bagged">
+            袋装水泥 <span class="count" id="countBagged">0</span>
+        </button>
+        <button type="button" class="seg-btn" data-product="bulk">
+            散装水泥 <span class="count" id="countBulk">0</span>
+        </button>
+    </div>
+
+    <!-- 地区与品牌 -->
+    <section id="regionList"></section>
+
+    <div class="row" style="margin:12px 0 4px;">
+        <button type="button" class="btn ghost grow" id="addRegion">＋ 添加地区</button>
+        <button type="button" class="btn ghost" id="syncDict">设置</button>
+        <button type="button" class="btn ghost" id="loadLast">载入上次</button>
+        <button type="button" class="btn danger" id="clearAll">清空</button>
+    </div>
+
+    <!-- 预览 -->
+    <section class="card">
+        <div class="card-head">
+            <h3>微信文本预览</h3>
+            <div class="row" style="gap:6px;">
+                <button type="button" class="btn sm ghost" id="togglePreview">收起</button>
+                <button type="button" class="btn sm ghost" id="compareBtn">对比</button>
+                <button type="button" class="btn sm ghost" id="historyBtn">历史数据</button>
+            </div>
+        </div>
+        <pre class="preview" id="preview">暂无数据</pre>
+        <p class="note" style="margin-top:8px;">发送前可核对一遍；管理员端可直接粘贴解析这份文本。</p>
+    </section>
+
+</main>
+
+<!-- 底部操作栏 -->
+<div class="footer-bar">
+    <div class="footer-meta" id="footerMeta">0 个地区 · 0 个品牌</div>
+    <button type="button" class="footer-edit" id="editAgainBtn" hidden>改一下<span class="edit-badge" id="editAgainBadge" hidden>0</span></button>
+    <button type="button" class="btn primary big" id="copyBtn">复制发微信</button>
+</div>
+
+<!-- 复制回退 / 历史 弹层 -->
+<div class="mask" id="sheetMask">
+    <div class="sheet" id="sheetBody">
+        <div class="sheet-head">
+            <h3 id="sheetTitle">复制文本</h3>
+            <button type="button" class="btn-icon" id="sheetClose">✕</button>
+        </div>
+        <div id="sheetContent"></div>
+        <div class="sheet-foot" id="sheetFoot"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 数据源 -->
+<datalist id="regionOptions"></datalist>
+<datalist id="brandOptions"></datalist>
+
+<script>
+/**
+ * 基础字典：水泥品牌、地区、品种。
+ * 业务员端与管理端共用，新增品牌/地区时只改这一处。
+ */
+(function (root) {
+    'use strict';
+
+    var REGIONS = [
+        // 邢台本地
+        '隆尧', '柏乡', '高邑', '赵县', '元氏', '栾城', '赞皇', '石家庄南',
+        '藁城', '正定', '石家庄北', '晋州', '内丘', '临城', '邢台',
+        // 邢台周边县市
+        '宁晋', '新河', '南宫', '巨鹿', '平乡', '任县', '南和', '任泽', '沙河',
+        '威县', '广宗', '邱县', '临西', '清河', '鸡泽', '曲周',
+        // 衡水
+        '衡水', '深州', '冀县', '枣强', '武邑', '阜城', '景县', '武强', '饶阳', '故城',
+        // 石家庄 / 辛集
+        '辛集', '深泽', '无极', '晋县',
+        // 沧州
+        '献县', '泊头', '南皮', '河间', '任丘', '吴桥', '东光', '沧州',
+        // 山东
+        '德州', '临清', '夏津', '武城', '平原', '聊城', '邯郸', '武安'
+    ];
+
+    var BRANDS = [
+        // 邢台（赞皇、临城、内丘）
+        '赞皇金隅', '内丘中联', '临城天利', '临城天信', '福石中联',
+        // 邢台其他
+        '三峦', '金隆', '曲寨', '矿峰曲寨',
+        // 武安、沙河
+        '武安新峰', '武安红山', '武安兴山', '武安大桥', '沙河双基', '沙河咏宁',
+        // 邢台其他
+        '钢信', '太行金隅', '牛山金隅', '卧虎山水泥',
+        // 衡水
+        '深州金隅', '深州冀东', '桃城水泥',
+        // 德州
+        '德州大坝', '齐河永锋', '平原大坝', '山东华泉',
+        // 沧州 / 聊城 / 邯郸
+        '东光中联', '聊城山水', '广宗金隅',
+        // 河北其他
+        '故城山水', '鼎鑫金隅', '天津金隅', '阳泉金隅', '鑫隆', '保事达',
+        // 11月竞家表里出现、原字典缺的（只增不删）
+        '保定中联', '临港金隅', '中联福石', '临城金隅', '沙河金隅', '邢台金隅',
+        // 山东及其他
+        '建德', '中达龙', '大唐', '安阳中联'
+    ];
+
+    var TYPES = {
+        bagged: ['PSA32.5袋', 'PSB32.5袋', 'PO42.5袋', 'PC42.5袋', 'PC32.5袋', 'PSS42.5袋', 'PSS32.5袋', 'PSA42.5袋', '砌筑袋', '其他袋装'],
+        bulk: ['42.5散', 'PSB32.5散', '其他散装']
+    };
+
+    var PRODUCT_LABEL = { bagged: '袋装水泥', bulk: '散装水泥' };
+
+    root.MRConstants = {
+        REGIONS: REGIONS,
+        BRANDS: BRANDS,
+        TYPES: TYPES,
+        PRODUCT_LABEL: PRODUCT_LABEL
+    };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/**
+ * 字典层：地区 / 水泥品牌 / 品种 / 竞家表行
+ * ---------------------------------------------------------------
+ * - 默认值来自 constants.js，原有内容一条都不删；
+ * - 管理端可增、改、删，结果存在 localStorage('mr_dict_v1')；
+ * - 可导出 dict.json 放到站点 assets/ 下，业务员端启动时自动读取，
+ *   或由业务员在手机端「导入字典」粘贴同步。
+ */
+(function (root) {
+    'use strict';
+
+    var C = root.MRConstants || {};
+    var KEY = 'mr_dict_v1';
+    var SELF_KEY = 'mr_self_v1';
+    var OWNER_KEY = 'mr_owner_v1';
+    var PEOPLE_KEY = 'mr_people_v1';
+    var BASELINE_KEY = 'mr_baseline_v1';
+
+    /**
+     * 竞家表固定行（与服务端表格 A/B 列顺序一致）。
+     * name 用于导出时 B 列显示；match 用于把业务员填写的单个地区归到这一行。
+     */
+    var DEFAULT_ROWS = [
+        { name: '隆尧', match: ['隆尧'] },
+        { name: '柏乡', match: ['柏乡'] },
+        { name: '高邑', match: ['高邑'] },
+        { name: '赵县', match: ['赵县'] },
+        { name: '元氏', match: ['元氏'] },
+        { name: '栾城、赞皇、石家庄南', match: ['栾城', '赞皇', '石家庄南', '石家庄南'] },
+        { name: '藁城、正定、石家庄北', match: ['藁城', '正定', '石家庄北'] },
+        { name: '晋州', match: ['晋州'] },
+        { name: '宁晋', match: ['宁晋'] },
+        { name: '新河', match: ['新河'] },
+        { name: '辛集、深泽', match: ['辛集', '深泽'] },
+        { name: '衡水 深州', match: ['衡水', '深州'] },
+        { name: '武邑', match: ['武邑'] },
+        { name: '阜城 景县 吴桥', match: ['阜城', '景县', '吴桥'] },
+        { name: '武强', match: ['武强'] },
+        { name: '饶阳', match: ['饶阳'] },
+        { name: '献县', match: ['献县'] },
+        { name: '泊头、南皮', match: ['泊头', '南皮'] },
+        { name: '河间 任丘 大成 沧州', match: ['河间', '任丘', '大成', '大城', '沧州'] },
+        { name: '清河', match: ['清河'] },
+        { name: '临西 临清', match: ['临西', '临清'] },
+        { name: '故城', match: ['故城'] },
+        { name: '枣强', match: ['枣强'] },
+        { name: '夏津、武城', match: ['夏津', '武城'] },
+        { name: '德州', match: ['德州'] },
+        { name: '南宫', match: ['南宫'] },
+        { name: '冀县', match: ['冀县', '冀州'] },
+        { name: '威县', match: ['威县'] },
+        { name: '广宗、邱县', match: ['广宗', '邱县'] },
+        { name: '巨鹿', match: ['巨鹿'] },
+        { name: '平乡', match: ['平乡'] },
+        { name: '鸡泽、曲周', match: ['鸡泽', '曲周'] },
+        { name: '任县 南和', match: ['任县', '南和', '任泽'] },
+        { name: '邢台 内丘', match: ['邢台', '内丘'] },
+        { name: '临城', match: ['临城'] }
+    ];
+
+    // 原字典里没有、但表格里用到的地区，补进来（只增不删）
+    var EXTRA_REGIONS = ['大成', '大城', '阜城', '景县', '冀州'];
+
+    function defaults() {
+        var regions = (C.REGIONS || []).slice();
+        EXTRA_REGIONS.forEach(function (r) {
+            if (regions.indexOf(r) < 0) regions.push(r);
+        });
+        return {
+            v: 1,
+            regions: regions,
+            brands: (C.BRANDS || []).slice(),
+            types: {
+                bagged: ((C.TYPES || {}).bagged || []).slice(),
+                bulk: ((C.TYPES || {}).bulk || []).slice()
+            },
+            rows: DEFAULT_ROWS.map(function (r) {
+                return { name: r.name, match: r.match.slice() };
+            })
+        };
+    }
+
+    var cache = null;
+
+    function readRaw() {
+        try {
+            var raw = localStorage.getItem(KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function persist() {
+        try {
+            localStorage.setItem(KEY, JSON.stringify(cache));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /** 读取并在结构缺失/损坏时用默认值补齐，绝不丢条目 */
+    function normalize(data) {
+        var def = defaults();
+        var out = { v: 1, regions: [], brands: [], types: { bagged: [], bulk: [] }, rows: [] };
+        if (!data || typeof data !== 'object') data = {};
+
+        function union(base, extra) {
+            var list = base.slice();
+            (Array.isArray(extra) ? extra : []).forEach(function (v) {
+                var s = String(v == null ? '' : v).trim();
+                if (!s) return;
+                if (list.indexOf(s) < 0) list.push(s);
+            });
+            return list;
+        }
+
+        out.regions = union(def.regions, data.regions);
+        out.brands = union(def.brands, data.brands);
+        out.types.bagged = union(def.types.bagged, (data.types || {}).bagged);
+        out.types.bulk = union(def.types.bulk, (data.types || {}).bulk);
+
+        var rows = Array.isArray(data.rows) && data.rows.length ? data.rows : def.rows;
+        rows.forEach(function (r) {
+            if (!r) return;
+            var name = String(r.name || '').trim();
+            if (!name) return;
+            var match = Array.isArray(r.match) && r.match.length ? r.match : splitName(name);
+            out.rows.push({ name: name, match: match });
+        });
+        return out;
+    }
+
+    /** 「栾城、赞皇」这类合并行名，拆成可匹配的单元 */
+    function splitName(name) {
+        return String(name || '').split(/[、,，\/\s]+/).filter(Boolean);
+    }
+
+    function get() {
+        if (!cache) {
+            var data = normalize(readRaw());
+            cache = data;
+            persist();
+        }
+        return cache;
+    }
+
+    function reset() {
+        cache = defaults();
+        persist();
+        return cache;
+    }
+
+    /* ---------------- 地区 / 品牌 / 品种 ---------------- */
+
+    function addTo(listName, name) {
+        var s = String(name == null ? '' : name).trim();
+        if (!s) return { ok: false, msg: '内容为空' };
+        var d = get();
+        if (listName === 'bagged' || listName === 'bulk') {
+            if (d.types[listName].indexOf(s) >= 0) return { ok: false, msg: '「' + s + '」已存在' };
+            d.types[listName].push(s);
+            persist();
+            return { ok: true, msg: '已添加品种「' + s + '」' };
+        }
+        if (d[listName].indexOf(s) >= 0) return { ok: false, msg: '「' + s + '」已存在' };
+        d[listName].push(s);
+        persist();
+        return { ok: true, msg: '已添加「' + s + '」' };
+    }
+
+    function rename(listName, oldName, newName) {
+        var a = String(oldName || '').trim();
+        var b = String(newName || '').trim();
+        if (!b) return { ok: false, msg: '新名称不能为空' };
+        var d = get();
+        var list = (listName === 'bagged' || listName === 'bulk') ? d.types[listName] : d[listName];
+        var i = list.indexOf(a);
+        if (i < 0) return { ok: false, msg: '找不到「' + a + '」' };
+        if (list.indexOf(b) >= 0) return { ok: false, msg: '「' + b + '」已存在' };
+        list[i] = b;
+        if (listName === 'regions') {
+            d.rows.forEach(function (r) {
+                var j = r.match.indexOf(a);
+                if (j >= 0) r.match[j] = b;
+            });
+        }
+        persist();
+        return { ok: true, msg: '已改名为「' + b + '」' };
+    }
+
+    function remove(listName, name) {
+        var s = String(name || '').trim();
+        var d = get();
+        var list = (listName === 'bagged' || listName === 'bulk') ? d.types[listName] : d[listName];
+        var i = list.indexOf(s);
+        if (i < 0) return { ok: false, msg: '找不到「' + s + '」' };
+        list.splice(i, 1);
+        persist();
+        return { ok: true, msg: '已删除「' + s + '」' };
+    }
+
+    function regions() { return get().regions.slice(); }
+    function brands() { return get().brands.slice(); }
+    function types(product) { return (get().types[product] || []).slice(); }
+    function rows() { return get().rows.map(function (r) { return { name: r.name, match: r.match.slice() }; }); }
+
+    /** 已知地区？含合并行内的子名称 */
+    function isKnownRegion(name) {
+        var s = String(name || '').trim();
+        if (!s) return false;
+        var d = get();
+        if (d.regions.indexOf(s) >= 0) return true;
+        for (var i = 0; i < d.rows.length; i++) {
+            if (d.rows[i].match.indexOf(s) >= 0) return true;
+            if (d.rows[i].name === s) return true;
+        }
+        return false;
+    }
+
+    function isKnownBrand(name) {
+        var s = String(name || '').trim();
+        if (!s) return false;
+        var d = get();
+        if (d.brands.indexOf(s) >= 0) return true;
+        // 「赞皇金隅水泥」这类多余后缀
+        for (var i = 0; i < d.brands.length; i++) {
+            if (s.indexOf(d.brands[i]) === 0 || d.brands[i].indexOf(s) === 0) return true;
+        }
+        return false;
+    }
+
+    function isKnownType(product, name) {
+        var s = String(name || '').trim();
+        if (!s) return false;
+        var d = get();
+        var list = d.types[product] || [];
+        if (list.indexOf(s) >= 0) return true;
+        // 允许业务员少写一个字，例如 PO42.5 / 42.5袋
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].indexOf(s) >= 0 || s.indexOf(list[i]) >= 0) return true;
+        }
+        return false;
+    }
+
+    /** 把业务员填写的地区归到竞家表的某一行；归不上返回 null */
+    function resolveRow(regionName) {
+        var s = String(regionName || '').trim();
+        if (!s) return null;
+        var d = get();
+        var i;
+        for (i = 0; i < d.rows.length; i++) {
+            if (d.rows[i].name === s) return d.rows[i].name;
+            if (d.rows[i].match.indexOf(s) >= 0) return d.rows[i].name;
+        }
+        // 地区名被合并行包含（如填「赞皇县」）
+        for (i = 0; i < d.rows.length; i++) {
+            if (d.rows[i].name.indexOf(s) >= 0) return d.rows[i].name;
+        }
+        return null;
+    }
+
+    function rowIndex(name) {
+        var d = get();
+        for (var i = 0; i < d.rows.length; i++) {
+            if (d.rows[i].name === name) return i;
+        }
+        return 999;
+    }
+
+    /* ---------------- 我方运费 / 我方价格（C、E 列） ---------------- */
+
+    function selfPrices() {
+        try {
+            var raw = localStorage.getItem(SELF_KEY);
+            var data = raw ? JSON.parse(raw) : {};
+            return data && typeof data === 'object' ? data : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function setSelfPrice(rowName, field, value) {
+        var data = selfPrices();
+        var row = data[rowName] || {};
+        row[field] = String(value == null ? '' : value);
+        if (!row.freight && !row.price) delete data[rowName];
+        else data[rowName] = row;
+        try {
+            localStorage.setItem(SELF_KEY, JSON.stringify(data));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /* ---------------- 原表基线（保持原样输出） ---------------- */
+
+    /**
+     * 原表基线：{ month:'2026-11', raw:{ '2026-11-02': { '隆尧': {a,c,d,e,f} } } }
+     * 有基线的日期，导出时可以原样照抄，不重排不改字。
+     */
+    function baseline() {
+        try {
+            var raw = localStorage.getItem(BASELINE_KEY);
+            var data = raw ? JSON.parse(raw) : null;
+            if (!data || typeof data !== 'object' || !data.raw) return { month: '', raw: {} };
+            return { month: data.month || '', raw: data.raw || {}, source: data.source || '', savedAt: data.savedAt || '' };
+        } catch (e) {
+            return { month: '', raw: {} };
+        }
+    }
+
+    function setBaseline(data) {
+        try {
+            if (!data || !data.raw) {
+                localStorage.removeItem(BASELINE_KEY);
+                return true;
+            }
+            localStorage.setItem(BASELINE_KEY, JSON.stringify({
+                month: data.month || '',
+                source: data.source || '',
+                savedAt: new Date().toISOString(),
+                raw: data.raw
+            }));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function baselineDates() {
+        return Object.keys(baseline().raw || {}).sort();
+    }
+
+    /**
+     * 人员名单：管理端维护，用于给区域挑负责人。
+     * 只在管理端用；业务员端不涉及，也不读这个键。
+     */
+    function people() {
+        try {
+            var raw = localStorage.getItem(PEOPLE_KEY);
+            var data = raw ? JSON.parse(raw) : [];
+            if (!Array.isArray(data)) return [];
+            var out = [];
+            data.forEach(function (n) {
+                var v = String(n == null ? '' : n).trim();
+                if (v && out.indexOf(v) < 0) out.push(v);
+            });
+            return out;
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function setPeople(list) {
+        var out = [];
+        (list || []).forEach(function (n) {
+            var v = String(n == null ? '' : n).trim();
+            if (v && out.indexOf(v) < 0) out.push(v);
+        });
+        try {
+            localStorage.setItem(PEOPLE_KEY, JSON.stringify(out));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function addPerson(name) {
+        var v = String(name == null ? '' : name).trim();
+        if (!v) return { ok: false, msg: '请输入姓名' };
+        var list = people();
+        if (list.indexOf(v) >= 0) return { ok: false, msg: '「' + v + '」已经在名单里了' };
+        list.push(v);
+        setPeople(list);
+        return { ok: true, msg: '已加入 ' + v };
+    }
+
+    function removePerson(name) {
+        var v = String(name == null ? '' : name).trim();
+        var list = people().filter(function (n) { return n !== v; });
+        setPeople(list);
+        // 同时把指定给他/她的区域清掉，回落到自动
+        var map = owners();
+        Object.keys(map).forEach(function (k) {
+            if (map[k] === v) delete map[k];
+        });
+        setOwners(map);
+        return { ok: true, msg: '已移出 ' + v + '，相关区域改为自动' };
+    }
+
+    /**
+     * 手工指定的区域负责人：{ '隆尧': '温玉英', '柏乡': '暂无人员' }
+     * 没指定时由导出层按历史数据自动判断，再没有就写「暂无人员」。
+     */
+    function owners() {
+        try {
+            var raw = localStorage.getItem(OWNER_KEY);
+            var data = raw ? JSON.parse(raw) : {};
+            return data && typeof data === 'object' ? data : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function setOwner(rowName, person) {
+        var data = owners();
+        var name = String(person == null ? '' : person).trim();
+        if (!name) delete data[rowName];
+        else data[rowName] = name;
+        try {
+            localStorage.setItem(OWNER_KEY, JSON.stringify(data));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function setOwners(map) {
+        var data = {};
+        Object.keys(map || {}).forEach(function (k) {
+            var v = String(map[k] == null ? '' : map[k]).trim();
+            if (v) data[k] = v;
+        });
+        try {
+            localStorage.setItem(OWNER_KEY, JSON.stringify(data));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /* ---------------- 导入 / 导出 ---------------- */
+
+    function toJSON() {
+        var d = get();
+        return JSON.stringify({
+            app: 'market-report-dict',
+            v: 1,
+            exportedAt: new Date().toISOString(),
+            regions: d.regions,
+            brands: d.brands,
+            types: d.types,
+            rows: d.rows
+        }, null, 2);
+    }
+
+    /** 合并导入：只增不删，返回新增条数 */
+    function importJSON(text) {
+        var data;
+        try {
+            data = typeof text === 'string' ? JSON.parse(text) : text;
+        } catch (e) {
+            return { ok: false, msg: '不是合法的 JSON' };
+        }
+        if (!data || typeof data !== 'object') return { ok: false, msg: '内容格式不对' };
+
+        var d = get();
+        var before = d.regions.length + d.brands.length + d.types.bagged.length + d.types.bulk.length;
+        var merged = normalize({
+            regions: d.regions.concat(data.regions || []),
+            brands: d.brands.concat(data.brands || []),
+            types: { bagged: d.types.bagged.concat((data.types || {}).bagged || []), bulk: d.types.bulk.concat((data.types || {}).bulk || []) },
+            rows: d.rows
+        });
+        cache = merged;
+        persist();
+        var after = merged.regions.length + merged.brands.length + merged.types.bagged.length + merged.types.bulk.length;
+        return { ok: true, msg: '已导入，新增 ' + (after - before) + ' 条', added: after - before };
+    }
+
+    /** 站点上有 assets/dict.json 就自动合并（file:// 打不开时静默跳过） */
+    function tryRemote(url) {
+        if (!root.fetch) return Promise.resolve(false);
+        return root.fetch(url || 'assets/dict.json', { cache: 'no-store' })
+            .then(function (res) {
+                if (!res || !res.ok) return false;
+                return res.text();
+            })
+            .then(function (text) {
+                if (!text) return false;
+                var r = importJSON(text);
+                return !!(r && r.ok);
+            })
+            .catch(function () { return false; });
+    }
+
+    var Dict = {
+        KEY: KEY,
+        SELF_KEY: SELF_KEY,
+        OWNER_KEY: OWNER_KEY,
+        PEOPLE_KEY: PEOPLE_KEY,
+        BASELINE_KEY: BASELINE_KEY,
+        baseline: baseline,
+        setBaseline: setBaseline,
+        baselineDates: baselineDates,
+        people: people,
+        setPeople: setPeople,
+        addPerson: addPerson,
+        removePerson: removePerson,
+        defaults: defaults,
+        get: get,
+        reset: reset,
+        add: addTo,
+        rename: rename,
+        remove: remove,
+        regions: regions,
+        brands: brands,
+        types: types,
+        rows: rows,
+        rowIndex: rowIndex,
+        isKnownRegion: isKnownRegion,
+        isKnownBrand: isKnownBrand,
+        isKnownType: isKnownType,
+        resolveRow: resolveRow,
+        selfPrices: selfPrices,
+        setSelfPrice: setSelfPrice,
+        owners: owners,
+        setOwner: setOwner,
+        setOwners: setOwners,
+        toJSON: toJSON,
+        importJSON: importJSON,
+        tryRemote: tryRemote
+    };
+
+    root.MRDict = Dict;
+    if (typeof module !== 'undefined' && module.exports) module.exports = Dict;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/**
+ * 水泥市场报价系统 - 核心逻辑层
+ * ---------------------------------------------------------------
+ * 纯逻辑，不依赖 DOM，可在浏览器和 Node 中运行（便于单元测试）。
+ * 职责：数据模型、微信文本生成、微信消息解析（多格式）、对比计算、
+ *       CSV 导出、本地存储读写与旧版本数据迁移。
+ */
+(function (root) {
+    'use strict';
+
+    var C = root.MRConstants || { REGIONS: [], BRANDS: [], TYPES: { bagged: [], bulk: [] } };
+
+    var STORE_KEY = 'mr_reports_v2';
+    var LEGACY_KEY_PREFIX = 'marketreport_';
+    var STORE_VERSION = 2;
+
+    /* ============================ 通用工具 ============================ */
+
+    function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+    /** 本地日期 YYYY-MM-DD（不要用 toISOString，凌晨会差一天） */
+    function todayStr(d) {
+        var date = d || new Date();
+        return date.getFullYear() + '-' + pad2(date.getMonth() + 1) + '-' + pad2(date.getDate());
+    }
+
+    /** 兼容 2026/2/5、2026年2月5日、2026.02.05 等写法 */
+    function normalizeDate(value) {
+        if (!value) return '';
+        var s = String(value).trim();
+        var m = s.match(/(\d{4})\s*[-/.年]\s*(\d{1,2})\s*[-/.月]\s*(\d{1,2})/);
+        if (!m) return '';
+        return m[1] + '-' + pad2(+m[2]) + '-' + pad2(+m[3]);
+    }
+
+    function uid() {
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            return crypto.randomUUID().replace(/-/g, '').slice(0, 16);
+        }
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    }
+
+    function toNum(v) {
+        if (v === 0) return 0;
+        if (v === null || v === undefined || v === '') return null;
+        var n = parseFloat(String(v).replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? null : n;
+    }
+
+    /** 数字展示：整数不带小数点，其余保留原精度 */
+    function fmtNum(n) {
+        if (n === null || n === undefined || n === '') return '';
+        var num = toNum(n);
+        if (num === null) return String(n);
+        return String(num);
+    }
+
+    function round2(n) {
+        return Math.round(n * 100) / 100;
+    }
+
+    /* ============================ 数据模型 ============================ */
+
+    function newBrand(name) {
+        return { name: name || '', type: '', price: '', price2: '', freight: '', remark: '' };
+    }
+
+    function newRegion(region) {
+        return { region: region || '', brands: [newBrand()] };
+    }
+
+    function newReport(opts) {
+        opts = opts || {};
+        return {
+            id: opts.id || uid(),
+            salesmanName: opts.salesmanName || '',
+            reportDate: opts.reportDate || todayStr(),
+            bagged: [],
+            bulk: [],
+            wechatText: '',
+            createTime: opts.createTime || new Date().toISOString(),
+            source: opts.source || 'manual'
+        };
+    }
+
+    /** 去掉空白行、合并同名地区、规范字段 */
+    function sanitize(report) {
+        if (!report) return null;
+        var out = {
+            id: report.id || uid(),
+            salesmanName: String(report.salesmanName || '').trim(),
+            reportDate: normalizeDate(report.reportDate) || todayStr(),
+            bagged: [],
+            bulk: [],
+            wechatText: report.wechatText || '',
+            createTime: report.createTime || new Date().toISOString(),
+            source: report.source || 'manual'
+        };
+        ['bagged', 'bulk'].forEach(function (p) {
+            var list = report[p] || [];
+            list.forEach(function (item) {
+                var brands = (item.brands || []).map(function (b) {
+                    return {
+                        name: String(b.name || '').trim(),
+                        type: String(b.type || '').trim(),
+                        price: fmtNum(b.price),
+                        price2: fmtNum(b.price2),
+                        freight: fmtNum(b.freight),
+                        remark: String(b.remark || '').trim()
+                    };
+                }).filter(function (b) { return b.name && b.price !== ''; });
+                if (!brands.length) return;
+                var regionName = String(item.region || '').trim();
+                var exist = out[p].filter(function (r) { return r.region === regionName; })[0];
+                if (exist) {
+                    exist.brands = exist.brands.concat(brands);
+                } else {
+                    out[p].push({ region: regionName, brands: brands });
+                }
+            });
+        });
+        return out;
+    }
+
+    /** 报告是否有内容 */
+    function isReportEmpty(report) {
+        if (!report) return true;
+        return !((report.bagged && report.bagged.length) || (report.bulk && report.bulk.length));
+    }
+
+    function countBrands(report) {
+        var n = 0;
+        ['bagged', 'bulk'].forEach(function (p) {
+            (report[p] || []).forEach(function (r) { n += (r.brands || []).length; });
+        });
+        return n;
+    }
+
+    function countRegions(report) {
+        var seen = {};
+        ['bagged', 'bulk'].forEach(function (p) {
+            (report[p] || []).forEach(function (r) { if (r.region) seen[r.region] = 1; });
+        });
+        return Object.keys(seen).length;
+    }
+
+    /* ============================ 文本生成 ============================ */
+
+    function brandLine(b) {
+        var s = b.name;
+        if (b.type) s += '（' + b.type + '）';
+        s += ' ' + fmtNum(b.price);
+        if (b.price2 !== '' && b.price2 !== null && b.price2 !== undefined) s += '-' + fmtNum(b.price2);
+        s += '元/吨';
+        if (b.freight !== '' && b.freight !== null && b.freight !== undefined) s += ' 运费' + fmtNum(b.freight) + '元';
+        if (b.remark) s += '【' + b.remark + '】';
+        return s;
+    }
+
+    /**
+     * 生成微信文本（与原版本格式一致，管理员端与业务员端互通）：
+     *   【市场信息】2026-11-23@张三
+     *
+     *   隆尧：
+     *   袋装水泥
+     *   赞皇金隅（PO42.5袋）320元/吨 运费50元【有返还】
+     *   散装水泥
+     *   ...
+     */
+    function buildText(report) {
+        var r = report || {};
+        var lines = ['【市场信息】' + (normalizeDate(r.reportDate) || todayStr()) + '@' + (String(r.salesmanName || '').trim() || '未填写姓名')];
+
+        var order = [];
+        var seen = {};
+        ['bagged', 'bulk'].forEach(function (p) {
+            (r[p] || []).forEach(function (item) {
+                var name = String(item.region || '').trim();
+                if (seen[name]) return;
+                seen[name] = 1;
+                order.push(name);
+            });
+        });
+        // 未填地区的放到最后，避免整行被静默丢弃
+        if (order.indexOf('') >= 0) {
+            order.splice(order.indexOf(''), 1);
+            order.push('');
+        }
+
+        order.forEach(function (region) {
+            var blocks = [];
+            ['bagged', 'bulk'].forEach(function (p) {
+                var items = (r[p] || []).filter(function (i) { return String(i.region || '').trim() === region; });
+                var linesOfBrands = [];
+                items.forEach(function (i) {
+                    (i.brands || []).forEach(function (b) {
+                        if (!b || !b.name || toNum(b.price) === null) return;
+                        linesOfBrands.push(brandLine(b));
+                    });
+                });
+                if (!linesOfBrands.length) return;
+                blocks.push(p === 'bagged' ? C.PRODUCT_LABEL.bagged : C.PRODUCT_LABEL.bulk);
+                blocks = blocks.concat(linesOfBrands);
+            });
+            if (!blocks.length) return;
+            lines.push('');
+            lines.push((region || '未填地区') + '：');
+            lines = lines.concat(blocks);
+        });
+
+        return lines.join('\n');
+    }
+
+    /** 统计信息不全的行，用于复制前提示 */
+    function untextedRows(report) {
+        var rows = [];
+        ['bagged', 'bulk'].forEach(function (p) {
+            (report[p] || []).forEach(function (item) {
+                (item.brands || []).forEach(function (b) {
+                    if (!b.name) return;
+                    if (!String(item.region || '').trim()) rows.push({ product: p, region: item.region, brand: b.name, reason: '缺地区' });
+                    else if (toNum(b.price) === null) rows.push({ product: p, region: item.region, brand: b.name, reason: '缺价格' });
+                    else if (b.freight === '' || b.freight === null) rows.push({ product: p, region: item.region, brand: b.name, reason: '缺运费' });
+                });
+            });
+        });
+        return rows;
+    }
+
+    /* ============================ 文本解析 ============================ */
+
+    var PRODUCT_RE = /^(袋装|散装)(水泥)?[：:]?$/;
+    var REGION_BLACKLIST = ['市场信息', '市场日报', '日报', '信息', '袋装水泥', '散装水泥', '袋装', '散装',
+        '备注', '品种', '价格', '运费', '合计', '电话', '说明', '注意', '今日', '昨日', '以上', '水泥'];
+
+    function stripLine(line) {
+        return String(line)
+            .replace(/^[\s\u3000]+|[\s\u3000]+$/g, '')
+            .replace(/^[\-–—•·*+>]+\s*/, '')
+            .replace(/^\d+[.、)）]\s*/, '')
+            .replace(/^[\u202a-\u202e]/g, '');
+    }
+
+    function matchTitle(line) {
+        var s = stripLine(line).replace(/^【\s*/, '').replace(/\s*】/, '');
+        // 【市场信息】2026-11-23@张三（现行格式）
+        var m = s.match(/(\d{4}\s*[-/.年]\s*\d{1,2}\s*[-/.月]\s*\d{1,2}\s*日?)\s*[@＠]\s*(.*)$/);
+        if (m) {
+            var date = normalizeDate(m[1]);
+            var name = String(m[2] || '').replace(/^[\s:：@]+/, '').replace(/[\s:：]+$/, '').trim();
+            if (!/市场|日报|报价|行情/i.test(s) && !date) return null;
+            return { date: date, salesmanName: name };
+        }
+        // 旧格式：只有日期，没有 @姓名（如「【市场日报】2026-02-05」「2026-11-22 张三」）
+        var m2 = s.match(/^(?:市场|日报|报价|行情|竞家)?[^0-9]{0,6}?(\d{4}\s*[-/.年]\s*\d{1,2}\s*[-/.月]\s*\d{1,2}\s*日?)(.*)$/);
+        if (m2) {
+            var date2 = normalizeDate(m2[1]);
+            if (!date2) return null;
+            var rest = String(m2[2] || '').replace(/^[\s:：@＠\-—]+/, '').trim();
+            var name2 = '';
+            // 同一行后面跟姓名（张三 / 张三 报价）
+            if (rest && /^[\u4e00-\u9fa5]{2,4}(\s*(报价|价格|市场信息))?$/.test(rest)) {
+                name2 = rest.replace(/\s*(报价|价格|市场信息)$/, '').trim();
+                rest = '';
+            }
+            if (!name2 && rest && !/^\d/.test(rest)) {
+                // 多余文字留着，不硬塞成姓名
+                rest = '';
+            }
+            return { date: date2, salesmanName: name2, needName: !name2 };
+        }
+        return null;
+    }
+
+    function matchProduct(line) {
+        var m = stripLine(line).match(PRODUCT_RE);
+        if (!m) return '';
+        return m[1] === '袋装' ? 'bagged' : 'bulk';
+    }
+
+    function isTypeText(text) {
+        return /^(P[SC]?[A-Z]*\s*)?\d{2}\.\d|砌筑|其他|袋装|散装|^\d{2}\.\d$|^P\.?[OC]/i.test(String(text).trim());
+    }
+
+    /**
+     * 解析一行品牌数据，支持常见写法：
+     *   赞皇金隅（PO42.5袋）320元/吨 运费50元【有返还】
+     *   赞皇金隅 320元/吨 运费50元（42.5散）
+     *   赞皇金隅：320-340元/吨（PSA32.5袋）
+     *   赞皇金隅 320
+     */
+    function parseBrandLine(raw) {
+        var line = stripLine(raw);
+        if (!line || !/\d/.test(line)) return null;
+
+        var remark = '';
+        var mRemark = line.match(/[【\[]([^】\]]+)[】\]]/);
+        if (mRemark) {
+            remark = mRemark[1].trim();
+            line = line.replace(mRemark[0], ' ');
+        }
+        var mRemark2 = line.match(/（?\s*备注[：:]\s*([^）)]+)\s*）?/);
+        if (mRemark2) {
+            remark = remark ? remark + ' ' + mRemark2[1].trim() : mRemark2[1].trim();
+            line = line.replace(mRemark2[0], ' ');
+        }
+
+        // 提取括号内容：品种 或 备注
+        var type = '';
+        var extra = [];
+        line = line.replace(/（([^）]+)）/g, function (all, inner) {
+            if (!type && isTypeText(inner)) type = inner.trim();
+            else extra.push(inner.trim());
+            return ' ';
+        });
+        if (!type && extra.length) {
+            type = extra.shift();
+        }
+        if (extra.length) {
+            var joined = extra.join(' ');
+            remark = remark ? remark + ' ' + joined : joined;
+        }
+
+        var freight = null;
+        var mFreight = line.match(/运费\s*[：:]?\s*(\d+(?:\.\d+)?)\s*元?/);
+        if (mFreight) {
+            freight = mFreight[1];
+            line = line.replace(mFreight[0], ' ');
+        }
+
+        var mPrice = line.match(/^(.+?)\s*[:：]?\s*(\d+(?:\.\d+)?)(?:\s*[-~～至到]\s*(\d+(?:\.\d+)?))?\s*(?:元|块)?\s*\/?\s*(?:吨)?\s*$/);
+        if (!mPrice) {
+            // 兜底：行内第一个价格数字
+            mPrice = line.match(/^(.+?)\s*(\d+(?:\.\d+)?)(?:\s*[-~～至到]\s*(\d+(?:\.\d+)?))?/);
+        }
+        if (!mPrice) return null;
+
+        var name = String(mPrice[1] || '')
+            .replace(/[（(）)【】\[\]]/g, '')
+            .replace(/[：:、,，\-—\s]+$/, '')
+            .trim();
+
+        if (!name || name.length < 2 || name.length > 20) return null;
+        if (/^\d+(\.\d+)?$/.test(name)) return null;
+        if (REGION_BLACKLIST.indexOf(name) >= 0) return null;
+        if (/^(运费|价格|备注|元)/.test(name)) return null;
+
+        return {
+            name: name,
+            type: type,
+            price: mPrice[2],
+            price2: mPrice[3] || '',
+            freight: freight === null ? '' : freight,
+            remark: remark
+        };
+    }
+
+    function isRegionName(name) {
+        var s = String(name || '').trim();
+        if (s.length < 2 || s.length > 12) return false;
+        if (/\d/.test(s)) return false;
+        if (REGION_BLACKLIST.indexOf(s) >= 0) return false;
+        if (/^(市场|报告|合计|小计)/.test(s)) return false;
+        return true;
+    }
+
+    function blankBlock() {
+        return {
+            report: newReport({}),
+            product: '',
+            region: '',
+            warnings: [],
+            unknownLines: []
+        };
+    }
+
+    function ensureRegion(block, product, regionName) {
+        var list = block.report[product];
+        var found = list.filter(function (r) { return r.region === regionName; })[0];
+        if (!found) {
+            found = { region: regionName, brands: [] };
+            list.push(found);
+        }
+        return found;
+    }
+
+    /**
+     * 解析一段可能包含多条报告的微信聊天记录。
+     * 返回 { items: [{report, warnings, unknownLines}], errors: [] }
+     */
+    function parseText(text) {
+        var out = { items: [], errors: [] };
+        if (!text || !String(text).trim()) {
+            out.errors.push('内容为空');
+            return out;
+        }
+
+        var lines = String(text)
+            .replace(/\r\n?/g, '\n')
+            .replace(/\u00a0|\u3000/g, ' ')
+            .split('\n');
+
+        var cur = null;
+
+        function flush() {
+            if (!cur) return;
+            if (!cur.report.reportDate) {
+                cur.warnings.push('未识别到日期，已默认使用今天');
+                cur.report.reportDate = todayStr();
+            }
+            if (!cur.report.salesmanName) {
+                cur.warnings.push('未识别到业务员姓名，请手动补充');
+            }
+            var clean = sanitize(cur.report);
+            cur.report = clean || cur.report;
+            if (!clean || isReportEmpty(clean)) {
+                cur.warnings.push('未解析到任何品牌价格');
+            }
+            if (cur.warnings.length || !isReportEmpty(clean || {})) out.items.push(cur);
+            cur = null;
+        }
+
+        lines.forEach(function (rawLine, lineIdx) {
+            var line = stripLine(rawLine);
+            var lineNo = lineIdx + 1;
+            if (!line) return;
+            if (/^[-—=*_]{3,}$/.test(line)) return;
+
+            var title = matchTitle(line);
+            if (title) {
+                flush();
+                cur = blankBlock();
+                cur.report.reportDate = title.date || '';
+                cur.report.salesmanName = title.salesmanName || '';
+                if (title.needName) cur.awaitName = true;
+                return;
+            }
+
+            if (!cur) {
+                cur = blankBlock();
+                cur.warnings.push('缺少标题行【市场信息】日期@姓名');
+            }
+
+            // 旧格式里姓名单独占一行（【市场日报】日期 → 张三 → 隆尧）
+            if (cur.awaitName) {
+                var maybeName = line.match(/^([\u4e00-\u9fa5]{2,4})$/);
+                if (maybeName) {
+                    var knownRegion = false;
+                    try {
+                        knownRegion = !!(root.MRDict && root.MRDict.isKnownRegion && root.MRDict.isKnownRegion(maybeName[1]));
+                    } catch (e) { knownRegion = false; }
+                    if (!knownRegion) {
+                        cur.awaitName = false;
+                        cur.report.salesmanName = maybeName[1];
+                        return;
+                    }
+                }
+                cur.awaitName = false; // 姓名只认紧跟着的第一行
+            }
+
+            var product = matchProduct(line);
+            if (product) {
+                cur.product = product;
+                return;
+            }
+
+            // 带冒号的行：可能是「地区：」「地区：品牌 价格」「品牌：价格」
+            var inline = line.match(/^(.{2,14}?)\s*[：:]\s*(.*)$/);
+            if (inline && isRegionName(inline[1])) {
+                var head = inline[1].trim();
+                var tail = inline[2].trim();
+
+                // 品牌：价格 —— 整行按品牌解析
+                if (tail && /^\d/.test(tail)) {
+                    var whole = parseBrandLine(line);
+                    if (whole) {
+                        if (!cur.product) {
+                            cur.product = 'bagged';
+                            cur.warnings.push('未标注袋装/散装，已按袋装处理');
+                        }
+                        if (!cur.region) cur.warnings.push('品牌「' + whole.name + '」前面没有地区');
+                        ensureRegion(cur, cur.product, cur.region).brands.push(whole);
+                        return;
+                    }
+                }
+
+                if (tail) {
+                    var brandInLine = parseBrandLine(tail);
+                    if (brandInLine) {
+                        cur.region = head;
+                        if (!cur.product) {
+                            cur.product = 'bagged';
+                            cur.warnings.push('未标注袋装/散装，已按袋装处理');
+                        }
+                        ensureRegion(cur, cur.product, cur.region).brands.push(brandInLine);
+                        return;
+                    }
+                    // 冒号后不是品牌，按普通地区行继续往下走
+                }
+
+                cur.region = head;
+                return;
+            }
+
+            if (cur.region) {
+                var b = parseBrandLine(line);
+                if (b) {
+                    if (!cur.product) {
+                        cur.product = 'bagged';
+                        cur.warnings.push('未标注袋装/散装，已按袋装处理');
+                    }
+                    ensureRegion(cur, cur.product, cur.region).brands.push(b);
+                    return;
+                }
+            }
+
+            var plainRegion = line.match(/^([\u4e00-\u9fa5]{2,8})$/);
+            if (plainRegion && isRegionName(plainRegion[1])) {
+                cur.region = plainRegion[1];
+                return;
+            }
+
+            cur.unknownLines.push({ no: lineNo, text: line });
+        });
+
+        flush();
+
+        if (!out.items.length) out.errors.push('没有识别到有效的报告内容，请检查格式');
+        out.items.forEach(function (item) {
+            if (item.unknownLines.length) {
+                var sample = item.unknownLines.slice(0, 3).map(function (l) { return l.text; });
+                item.warnings.push('有 ' + item.unknownLines.length + ' 行未识别：' + sample.join(' / ') +
+                    (item.unknownLines.length > 3 ? ' …' : ''));
+            }
+        });
+        return out;
+    }
+
+    /** 单条解析，返回 report（兼容旧调用方式） */
+    function parseOne(text) {
+        var res = parseText(text);
+        return res.items.length ? res.items[0].report : null;
+    }
+
+    /* ============================ 录入校验 ============================ */
+
+    var NUM_RE = /^\d+(\.\d+)?$/;
+
+    /**
+     * 校验一个品牌行的填写质量。opts 可传 {isKnownRegion, isKnownBrand, isKnownType}
+     * 返回 [{level:'error'|'warn'|'info', field, msg}]
+     */
+    function validateRow(item, brand, opts) {
+        opts = opts || {};
+        var issues = [];
+        var region = String((item && item.region) || '').trim();
+        var name = String((brand && brand.name) || '').trim();
+        var raw = brand || {};
+        var blank = !name && !raw.price && !raw.price2 && !raw.freight && !raw.remark && !raw.type;
+        if (blank) return issues;
+
+        if (!name) {
+            issues.push({ level: 'error', field: 'name', msg: '缺品牌名' });
+        } else if (opts.isKnownBrand && !opts.isKnownBrand(name)) {
+            issues.push({ level: 'warn', field: 'name', msg: '品牌「' + name + '」不在字典里，建议从下拉提示里选' });
+        }
+
+        if (!region) {
+            issues.push({ level: 'error', field: 'region', msg: '缺地区' });
+        } else if (opts.isKnownRegion && !opts.isKnownRegion(region)) {
+            issues.push({ level: 'warn', field: 'region', msg: '地区「' + region + '」不在字典里，导出表格时可能对不上行' });
+        }
+
+        var price = String(raw.price == null ? '' : raw.price).trim();
+        if (!price) issues.push({ level: 'error', field: 'price', msg: '缺价格' });
+        else if (!NUM_RE.test(price)) issues.push({ level: 'error', field: 'price', msg: '价格「' + price + '」不是纯数字（如 220 或 220.5）' });
+        else if (toNum(price) === 0) issues.push({ level: 'error', field: 'price', msg: '价格不能填 0' });
+
+        var price2 = String(raw.price2 == null ? '' : raw.price2).trim();
+        if (price2 && !NUM_RE.test(price2)) {
+            issues.push({ level: 'error', field: 'price2', msg: '区间上限「' + price2 + '」不是纯数字' });
+        } else if (price2 && NUM_RE.test(price) && toNum(price2) < toNum(price)) {
+            issues.push({ level: 'error', field: 'price2', msg: '区间上限比下限还低' });
+        }
+
+        var freight = String(raw.freight == null ? '' : raw.freight).trim();
+        if (!freight) {
+            issues.push({ level: 'warn', field: 'freight', msg: '没填运费，导出的表格这一行会缺运费' });
+        } else if (!NUM_RE.test(freight)) {
+            issues.push({ level: 'error', field: 'freight', msg: '运费「' + freight + '」不是纯数字' });
+        }
+
+        var type = String(raw.type || '').trim();
+        if (!type) {
+            issues.push({ level: 'info', field: 'type', msg: '没选品种，导出时会按「默认列」归位' });
+        } else if (opts.isKnownType && !opts.isKnownType(type)) {
+            issues.push({ level: 'warn', field: 'type', msg: '品种「' + type + '」不在字典里' });
+        }
+        return issues;
+    }
+
+    /** 整份报告的校验结果 */
+    function validateReport(report, opts) {
+        var all = [];
+        ['bagged', 'bulk'].forEach(function (p) {
+            ((report && report[p]) || []).forEach(function (item, ri) {
+                (item.brands || []).forEach(function (b, bi) {
+                    validateRow(item, b, opts).forEach(function (it) {
+                        all.push({
+                            product: p,
+                            region: String(item.region || ''),
+                            brand: String((b && b.name) || ''),
+                            rowIndex: ri,
+                            brandIndex: bi,
+                            level: it.level, field: it.field, msg: it.msg
+                        });
+                    });
+                });
+            });
+        });
+        return {
+            list: all,
+            errors: all.filter(function (i) { return i.level === 'error'; }),
+            warns: all.filter(function (i) { return i.level === 'warn'; })
+        };
+    }
+
+    /** 拼音/字形都没法算，用字符二元组重合度找相似项，用于「是不是想写 X」 */
+    function bigrams(s) {
+        var t = String(s).replace(/\s/g, '');
+        var out = [];
+        for (var i = 0; i < t.length - 1; i++) out.push(t.slice(i, i + 2));
+        if (!out.length) out.push(t);
+        return out;
+    }
+
+    function suggest(name, list, limit) {
+        var target = bigrams(name);
+        var scored = [];
+        (list || []).forEach(function (cand) {
+            var other = bigrams(cand);
+            var hit = 0;
+            target.forEach(function (g) { if (other.indexOf(g) >= 0) hit += 1; });
+            var score = hit / Math.max(target.length, other.length);
+            if (score > 0.34 && cand !== name) scored.push({ name: cand, score: score });
+        });
+        scored.sort(function (a, b) { return b.score - a.score; });
+        return scored.slice(0, limit || 3).map(function (s) { return s.name; });
+    }
+
+    /* ============================ 对比计算 ============================ */
+
+    function timeOf(report) {
+        var t = Date.parse(report && report.createTime);
+        return isNaN(t) ? 0 : t;
+    }
+
+    /** 同一业务员同一天可能有多次提交，取最新一份 */
+    function latestBySalesman(reports) {
+        var map = {};
+        var order = [];
+        (reports || []).forEach(function (r) {
+            if (!r) return;
+            var name = String(r.salesmanName || '未知').trim() || '未知';
+            if (!map[name]) {
+                map[name] = r;
+                order.push(name);
+            } else if (timeOf(r) >= timeOf(map[name])) {
+                map[name] = r;
+            }
+        });
+        return { map: map, order: order };
+    }
+
+    function rowIndex(report) {
+        var index = {};
+        ['bagged', 'bulk'].forEach(function (p) {
+            (report[p] || []).forEach(function (item) {
+                (item.brands || []).forEach(function (b) {
+                    if (!b || !b.name) return;
+                    var key = p + '|' + (item.region || '') + '|' + b.name;
+                    index[key] = {
+                        product: p,
+                        region: item.region || '',
+                        brand: b.name,
+                        type: b.type || '',
+                        price: toNum(b.price),
+                        price2: toNum(b.price2),
+                        freight: toNum(b.freight),
+                        remark: b.remark || ''
+                    };
+                });
+            });
+        });
+        return index;
+    }
+
+    function landedOf(row) {
+        if (!row) return null;
+        if (row.price === null) return null;
+        return row.freight === null ? row.price : row.price + row.freight;
+    }
+
+    function comparePair(left, right) {
+        if (!left) return { status: 'added' };
+        if (!right) return { status: 'removed' };
+        var dPrice = (left.price !== null && right.price !== null) ? round2(right.price - left.price) : null;
+        var dFreight = (left.freight !== null && right.freight !== null) ? round2(right.freight - left.freight) : null;
+        var leftLanded = landedOf(left);
+        var rightLanded = landedOf(right);
+        var dLanded = (leftLanded !== null && rightLanded !== null) ? round2(rightLanded - leftLanded) : null;
+        var status = 'flat';
+        if (dPrice !== null && dPrice !== 0) status = dPrice > 0 ? 'up' : 'down';
+        else if (left.type !== right.type || left.remark !== right.remark) status = 'meta';
+        else if (dFreight !== null && dFreight !== 0) status = 'meta';
+        else if (dPrice === null) status = 'meta';
+        return { status: status, dPrice: dPrice, dFreight: dFreight, dLanded: dLanded };
+    }
+
+    /**
+     * 对比两份日期数据
+     * @param {string} leftDate 基准日期
+     * @param {Array} leftReports 基准日期的原始记录数组
+     * @param {string} rightDate 对比日期
+     * @param {Array} rightReports
+     * @param {string|null} onlySalesman 只看某个业务员
+     */
+    function compare(leftDate, leftReports, rightDate, rightReports, onlySalesman) {
+        var L = latestBySalesman(leftReports);
+        var R = latestBySalesman(rightReports);
+        var names = R.order.slice();
+        L.order.forEach(function (n) { if (names.indexOf(n) < 0) names.push(n); });
+        if (onlySalesman) names = names.filter(function (n) { return n === onlySalesman; });
+
+        var stats = { up: 0, down: 0, flat: 0, added: 0, removed: 0, meta: 0, salesmen: names.length, brands: 0 };
+
+        var salesmen = names.map(function (name) {
+            var lr = L.map[name];
+            var rr = R.map[name];
+            var lIndex = lr ? rowIndex(lr) : {};
+            var rIndex = rr ? rowIndex(rr) : {};
+            var keys = Object.keys(rIndex);
+            Object.keys(lIndex).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); });
+
+            var groups = [];
+            var groupMap = {};
+
+            keys.forEach(function (k) {
+                var l = lIndex[k] || null;
+                var r = rIndex[k] || null;
+                var base = r || l;
+                var gkey = base.product + '|' + base.region;
+                var group = groupMap[gkey];
+                if (!group) {
+                    group = { product: base.product, region: base.region, rows: [] };
+                    groupMap[gkey] = group;
+                    groups.push(group);
+                }
+                var diff = comparePair(l, r);
+                var row = {
+                    product: base.product,
+                    region: base.region,
+                    brand: base.brand,
+                    left: l,
+                    right: r,
+                    status: diff.status,
+                    dPrice: diff.dPrice === undefined ? null : diff.dPrice,
+                    dFreight: diff.dFreight === undefined ? null : diff.dFreight,
+                    dLanded: diff.dLanded === undefined ? null : diff.dLanded,
+                    leftLanded: landedOf(l),
+                    rightLanded: landedOf(r)
+                };
+                if (diff.status === 'meta' && !(diff.dPrice === null && diff.dFreight === null)) {
+                    row.metaOnly = true;
+                }
+                group.rows.push(row);
+                stats.rowCount = (stats.rowCount || 0) + 1;
+                if (stats[diff.status] !== undefined) stats[diff.status] += 1;
+            });
+
+            groups.forEach(function (g) {
+                g.rows.sort(function (a, b) { return a.brand.localeCompare(b.brand, 'zh'); });
+            });
+            groups.sort(function (a, b) {
+                if (a.product !== b.product) return a.product === 'bagged' ? -1 : 1;
+                return a.region.localeCompare(b.region, 'zh');
+            });
+
+            return {
+                name: name,
+                hasLeft: !!lr,
+                hasRight: !!rr,
+                leftTime: lr ? lr.createTime : '',
+                rightTime: rr ? rr.createTime : '',
+                groups: groups
+            };
+        });
+
+        stats.brands = stats.rowCount || 0;
+        delete stats.rowCount;
+        return { leftDate: leftDate, rightDate: rightDate, salesmen: salesmen, stats: stats };
+    }
+
+    /* ============================ 导出 ============================ */
+
+    function flatten(reports) {
+        var rows = [];
+        (reports || []).forEach(function (r) {
+            ['bagged', 'bulk'].forEach(function (p) {
+                (r[p] || []).forEach(function (item) {
+                    (item.brands || []).forEach(function (b) {
+                        rows.push([
+                            r.reportDate || '',
+                            r.salesmanName || '',
+                            p === 'bagged' ? '袋装' : '散装',
+                            item.region || '',
+                            b.name || '',
+                            b.type || '',
+                            fmtNum(b.price),
+                            fmtNum(b.price2),
+                            fmtNum(b.freight),
+                            fmtNum(landedOf({ price: toNum(b.price), freight: toNum(b.freight) })),
+                            b.remark || ''
+                        ]);
+                    });
+                });
+            });
+        });
+        return rows;
+    }
+
+    function csvCell(v) {
+        var s = v === null || v === undefined ? '' : String(v);
+        if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+    }
+
+    function toCSV(reports) {
+        var head = ['日期', '业务员', '装包', '地区', '品牌', '品种', '价格1', '价格2', '运费', '落地价', '备注'];
+        var lines = [head.map(csvCell).join(',')];
+        flatten(reports).forEach(function (row) {
+            lines.push(row.map(csvCell).join(','));
+        });
+        return '\ufeff' + lines.join('\r\n');
+    }
+
+    function backupJSON(reports) {
+        return JSON.stringify({
+            app: 'market-report',
+            version: STORE_VERSION,
+            exportedAt: new Date().toISOString(),
+            reports: reports || []
+        }, null, 2);
+    }
+
+    /* ============================ 本地存储 ============================ */
+
+    function readJSON(key) {
+        try {
+            var raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writeJSON(key, value) {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /** 把旧版 marketreport_YYYY-MM-DD 结构转成新版 */
+    function migrateLegacy() {
+        var migrated = [];
+        try {
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if (!key || key.indexOf(LEGACY_KEY_PREFIX) !== 0) continue;
+                var date = key.slice(LEGACY_KEY_PREFIX.length);
+                var list = readJSON(key) || [];
+                if (!Array.isArray(list)) continue;
+                list.forEach(function (old) {
+                    var rep = newReport({
+                        salesmanName: old.salesmanName,
+                        reportDate: normalizeDate(old.reportDate) || normalizeDate(date),
+                        createTime: old.createTime,
+                        source: 'migrated'
+                    });
+                    rep.wechatText = old.wechatText || '';
+                    rep.bagged = (old.baggedItems || old.bagged || []).map(function (it) {
+                        return { region: it.region || it.name || '', brands: it.brands || [] };
+                    });
+                    rep.bulk = (old.bulkItems || old.bulk || []).map(function (it) {
+                        return { region: it.region || it.name || '', brands: it.brands || [] };
+                    });
+                    var clean = sanitize(rep);
+                    if (clean && !isReportEmpty(clean)) migrated.push(clean);
+                });
+            }
+        } catch (e) { /* ignore */ }
+        return migrated;
+    }
+
+    function loadReports() {
+        var data = readJSON(STORE_KEY);
+        if (data && Array.isArray(data.reports)) return data.reports;
+        var migrated = migrateLegacy();
+        if (migrated.length) {
+            saveReports(migrated);
+            return migrated;
+        }
+        return [];
+    }
+
+    function saveReports(reports) {
+        var ok = writeJSON(STORE_KEY, { version: STORE_VERSION, savedAt: new Date().toISOString(), reports: reports });
+        return ok;
+    }
+
+    /** 按 日期+业务员 去重写入；返回 { reports, action } */
+    function upsert(reports, report) {
+        var list = reports || [];
+        var clean = sanitize(report);
+        if (!clean) return { reports: list, action: 'invalid' };
+        var idx = -1;
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].reportDate === clean.reportDate &&
+                String(list[i].salesmanName).trim() === clean.salesmanName) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx >= 0) {
+            clean.id = list[idx].id || clean.id;
+            clean.createTime = new Date().toISOString();
+            list[idx] = clean;
+            return { reports: list, action: 'replaced' };
+        }
+        list.push(clean);
+        return { reports: list, action: 'created' };
+    }
+
+    function removeReport(reports, id) {
+        return (reports || []).filter(function (r) { return String(r.id) !== String(id); });
+    }
+
+    function reportsByDate(reports, date) {
+        return (reports || []).filter(function (r) { return r.reportDate === date; });
+    }
+
+    function allDates(reports) {
+        var set = {};
+        (reports || []).forEach(function (r) { if (r.reportDate) set[r.reportDate] = 1; });
+        return Object.keys(set).sort();
+    }
+
+    function allSalesmen(reports) {
+        var set = {};
+        (reports || []).forEach(function (r) {
+            var n = String(r.salesmanName || '').trim();
+            if (n) set[n] = 1;
+        });
+        return Object.keys(set).sort(function (a, b) { return a.localeCompare(b, 'zh'); });
+    }
+
+    var MR = {
+        STORE_KEY: STORE_KEY,
+        todayStr: todayStr,
+        normalizeDate: normalizeDate,
+        uid: uid,
+        toNum: toNum,
+        fmtNum: fmtNum,
+        newBrand: newBrand,
+        newRegion: newRegion,
+        newReport: newReport,
+        sanitize: sanitize,
+        isReportEmpty: isReportEmpty,
+        countBrands: countBrands,
+        countRegions: countRegions,
+        buildText: buildText,
+        untextedRows: untextedRows,
+        parseText: parseText,
+        parseOne: parseOne,
+        validateRow: validateRow,
+        validateReport: validateReport,
+        suggest: suggest,
+        parseBrandLine: parseBrandLine,
+        matchTitle: matchTitle,
+        latestBySalesman: latestBySalesman,
+        landedOf: landedOf,
+        compare: compare,
+        flatten: flatten,
+        toCSV: toCSV,
+        backupJSON: backupJSON,
+        loadReports: loadReports,
+        saveReports: saveReports,
+        upsert: upsert,
+        removeReport: removeReport,
+        reportsByDate: reportsByDate,
+        allDates: allDates,
+        allSalesmen: allSalesmen
+    };
+
+    root.MarketReport = MR;
+    if (typeof module !== 'undefined' && module.exports) module.exports = MR;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/**
+ * 旧版本地数据兼容层。
+ *
+ * 升级后业务员不用再考虑「以前发到微信的文本格式」，直接把旧程序留在本机的数据读进来：
+ *   - 旧版业务员端 localStorage：marketReportData（含 baggedItems / bulkItems / reportDate）
+ *   - 旧版管理端 localStorage：marketreport_2026-11-20 这类按天存的数组（记录里是 baggedItems / bulkItems）
+ *   - 旧程序导出的 JSON 备份（数组、{reports:[...]}、按天 key 的对象都认）
+ *   - 纯文本文件（实在只有微信原文时，退回 core 的 parseText）
+ *
+ * 统一转成新版报告结构 {salesmanName, reportDate, bagged:[{region,brands}], bulk:[...]}，
+ * 由调用方决定是「带入某天继续改」还是「并入本机历史供对比」。
+ */
+(function () {
+    'use strict';
+
+    var MR = window.MarketReport;
+
+    var DRAFT_KEY = 'marketReportData';
+    var PREFIX = 'marketreport_';
+
+    function str(v) {
+        return v === undefined || v === null ? '' : String(v);
+    }
+
+    function first(obj) {
+        for (var i = 0; i < arguments.length; i += 1) {
+            var v = arguments[i];
+            if (v !== undefined && v !== null && v !== '') return v;
+        }
+        return '';
+    }
+
+    function brandOf(b) {
+        if (!b || typeof b !== 'object') return null;
+        var name = str(first(b.name, b.brand, b.brandName, b['品牌']));
+        if (!name) return null;
+        return {
+            name: name,
+            type: str(first(b.type, b.spec, b.grade, b['品种'])),
+            price: str(first(b.price, b.price1, b['价格'])),
+            price2: str(first(b.price2, b.priceMax, b.high, b['价格2'])),
+            freight: str(first(b.freight, b.freightPrice, b.yunfei, b['运费'])),
+            remark: str(first(b.remark, b.note, b.memo, b['备注']))
+        };
+    }
+
+    function itemsOf(list) {
+        if (!Array.isArray(list)) return [];
+        var out = [];
+        list.forEach(function (item) {
+            if (!item || typeof item !== 'object') return;
+            var region = str(first(item.region, item.name, item.area, item['地区'])).trim();
+            var brands = Array.isArray(item.brands) ? item.brands : [];
+            // 兼容「一条就是一个品牌」的写法
+            if (!brands.length && (item.brand || item.brandName)) brands = [item];
+            var mapped = brands.map(brandOf).filter(Boolean);
+            if (!region && !mapped.length) return;
+            out.push({ region: region, brands: mapped });
+        });
+        return out;
+    }
+
+    /** 一条旧记录 → 新版报告；dateHint 来自 marketreport_ 的 key */
+    function reportOf(rec, dateHint, source) {
+        if (!rec || typeof rec !== 'object') return null;
+        var date = MR.normalizeDate(first(rec.reportDate, rec.date, rec.day, dateHint));
+        if (!date) return null;
+        var bagged = itemsOf(first(rec.baggedItems, rec.bagged, rec.baggedRegions, []));
+        var bulk = itemsOf(first(rec.bulkItems, rec.bulk, rec.bulkRegions, []));
+        if (!bagged.length && !bulk.length) return null;
+        var name = str(first(rec.salesmanName, rec.salesman, rec.name, rec['业务员'])).trim();
+        var report = {
+            id: 'legacy-' + date + '-' + (name || '未知') + '-' + Math.random().toString(36).slice(2, 8),
+            salesmanName: name,
+            reportDate: date,
+            bagged: bagged,
+            bulk: bulk,
+            createTime: str(first(rec.createTime, rec.time, rec.createdAt)) || (date + 'T08:00:00.000Z'),
+            source: source || '旧版导入'
+        };
+        return MR.sanitize ? MR.sanitize(report) : report;
+    }
+
+    function flatten(list, dateHint, source) {
+        var out = [];
+        (Array.isArray(list) ? list : [list]).forEach(function (rec) {
+            var rep = reportOf(rec, dateHint, source);
+            if (rep && !MR.isReportEmpty(rep)) out.push(rep);
+        });
+        return out;
+    }
+
+    /** 一个已 JSON.parse 的负载可能是：数组 / {reports} / 单条旧记录 / 按天 key 的对象 */
+    function reportsFromObject(data) {
+        if (!data) return [];
+        if (Array.isArray(data)) return flatten(data, '', '旧版导入');
+
+        if (Array.isArray(data.reports)) {
+            return flatten(data.reports, '', '旧版导入');
+        }
+
+        // 单条：旧草稿或旧报告
+        if (data.baggedItems || data.bulkItems || data.bagged || data.bulk || data.baggedRegions) {
+            return flatten([data], '', '旧版导入');
+        }
+
+        // 旧管理端整包：{ "marketreport_2026-11-20": [ ... ] }
+        var out = [];
+        Object.keys(data).forEach(function (k) {
+            if (k.indexOf(PREFIX) === 0) {
+                var date = k.slice(PREFIX.length).replace(/_/g, '-');
+                out = out.concat(flatten(data[k], date, '旧管理端'));
+            }
+        });
+        return out;
+    }
+
+    /** 文件内容：优先按 JSON 读，不是 JSON 再按微信文本解析 */
+    function reportsFromText(text) {
+        var raw = String(text || '').trim();
+        if (!raw) return [];
+        try {
+            return reportsFromObject(JSON.parse(raw));
+        } catch (e) {
+            if (!MR.parseText) return [];
+            var res = MR.parseText(raw);
+            return (res.items || []).map(function (it) {
+                var rep = it.report;
+                if (!rep) return null;
+                rep.source = '旧文本导入';
+                return rep;
+            }).filter(Boolean);
+        }
+    }
+
+    /** 扫本机旧版 localStorage，返回按天汇总 */
+    function scanStorage() {
+        var out = [];
+        var keys = [];
+        try {
+            for (var i = 0; i < localStorage.length; i += 1) {
+                var k = localStorage.key(i);
+                if (!k) continue;
+                if (k === DRAFT_KEY || k.indexOf(PREFIX) === 0) keys.push(k);
+            }
+        } catch (e) {
+            return { reports: [], days: [], keys: [] };
+        }
+
+        keys.forEach(function (k) {
+            var raw = null;
+            try { raw = localStorage.getItem(k); } catch (e) { }
+            if (!raw) return;
+            var data = null;
+            try { data = JSON.parse(raw); } catch (e) { return; }
+            var dateHint = k.indexOf(PREFIX) === 0 ? k.slice(PREFIX.length).replace(/_/g, '-') : '';
+            var source = k === DRAFT_KEY ? '旧版草稿' : '旧管理端';
+            var list = data && !Array.isArray(data) && Array.isArray(data.reports) ? data.reports : data;
+            out = out.concat(flatten(list, dateHint, source));
+        });
+
+        return { reports: dedupe(out), days: daysOf(out), keys: keys };
+    }
+
+    /** 同一天同一业务员多条时留最新一条（旧数据重复导入不叠加） */
+    function dedupe(list) {
+        var best = {};
+        list.forEach(function (r) {
+            var k = r.reportDate + '|' + (r.salesmanName || '未知');
+            var cur = best[k];
+            if (!cur || String(r.createTime || '') >= String(cur.createTime || '')) best[k] = r;
+        });
+        return Object.keys(best).map(function (k) { return best[k]; });
+    }
+
+    function daysOf(list) {
+        var map = {};
+        (list || []).forEach(function (r) {
+            var d = r.reportDate;
+            if (!d) return;
+            if (!map[d]) map[d] = { date: d, reports: [], salesmen: {}, regions: 0, brands: 0 };
+            var day = map[d];
+            day.reports.push(r);
+            if (r.salesmanName) day.salesmen[r.salesmanName] = 1;
+            (r.bagged || []).concat(r.bulk || []).forEach(function (item) {
+                if (item.region) day.regions += 1;
+                day.brands += (item.brands || []).length;
+            });
+        });
+        return Object.keys(map).map(function (k) {
+            var d = map[k];
+            d.salesmen = Object.keys(d.salesmen);
+            return d;
+        }).sort(function (a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+    }
+
+    /** 把一天里的多条报告摊平成可编辑的袋装/散装列表 */
+    function mergeDay(reports, salesmanName) {
+        var list = (reports || []).filter(function (r) {
+            return !salesmanName || !r.salesmanName || r.salesmanName === salesmanName;
+        });
+        if (!list.length) list = reports || [];
+        var bagged = [], bulk = [];
+        list.forEach(function (r) {
+            bagged = bagged.concat(r.bagged || []);
+            bulk = bulk.concat(r.bulk || []);
+        });
+        return { bagged: bagged, bulk: bulk };
+    }
+
+    window.MRLegacy = {
+        DRAFT_KEY: DRAFT_KEY,
+        PREFIX: PREFIX,
+        reportOf: reportOf,
+        reportsFromObject: reportsFromObject,
+        reportsFromText: reportsFromText,
+        scanStorage: scanStorage,
+        daysOf: daysOf,
+        mergeDay: mergeDay
+    };
+})();
+
+</script>
+<script>
+/**
+ * 轻量 UI 工具：选择器、提示、复制（含微信兼容回退）、下载、弹层控制。
+ */
+(function (root) {
+    'use strict';
+
+    function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+    function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
+
+    function esc(s) {
+        return String(s === null || s === undefined ? '' : s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    var toastTimer = null;
+    /** duration=0 时常驻，直到下一次 toast 覆盖 */
+    function toast(message, type, duration) {
+        var el = document.getElementById('toast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'toast';
+            el.className = 'toast';
+            document.body.appendChild(el);
+        }
+        el.textContent = message;
+        el.className = 'toast show' + (type ? ' ' + type : '');
+        clearTimeout(toastTimer);
+        toastTimer = null;
+        if (duration === 0) return;
+        toastTimer = setTimeout(function () {
+            el.className = 'toast' + (type ? ' ' + type : '');
+        }, typeof duration === 'number' ? duration : 2400);
+    }
+
+    /** iOS/微信里 navigator.clipboard 常常不可用，逐级回退 */
+    function copyText(text) {
+        return new Promise(function (resolve) {
+            function fallback() {
+                try {
+                    var ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.setAttribute('readonly', '');
+                    ta.style.position = 'fixed';
+                    ta.style.top = '-1000px';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ta.setSelectionRange(0, text.length);
+                    var ok = document.execCommand && document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    resolve(!!ok);
+                } catch (e) {
+                    resolve(false);
+                }
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function () { resolve(true); }).catch(fallback);
+            } else {
+                fallback();
+            }
+        });
+    }
+
+    function download(filename, content, mime) {
+        var blob = new Blob([content], { type: mime || 'text/plain;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 500);
+    }
+
+    function openSheet(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('show');
+    }
+
+    function closeSheet(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove('show');
+    }
+
+    function debounce(fn, wait) {
+        var t = null;
+        return function () {
+            var args = arguments, ctx = this;
+            clearTimeout(t);
+            t = setTimeout(function () { fn.apply(ctx, args); }, wait || 200);
+        };
+    }
+
+    function formatDateTime(iso) {
+        if (!iso) return '';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return String(iso);
+        function p(n) { return n < 10 ? '0' + n : '' + n; }
+        return (d.getMonth() + 1) + '/' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
+
+    root.MRUI = {
+        $: $,
+        $$: $$,
+        esc: esc,
+        toast: toast,
+        copyText: copyText,
+        download: download,
+        openSheet: openSheet,
+        closeSheet: closeSheet,
+        debounce: debounce,
+        formatDateTime: formatDateTime
+    };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/**
+ * 市场日报 · 电脑汇总网络中转（网页版）
+ * ---------------------------------------------------------------
+ * 业务员点“复制发微信”后，把当天数据加密、分片发到 ntfy，
+ * 办公室电脑接收端轮询解包并汇总。网页版在 iPhone / 安卓都能用。
+ *
+ * 不依赖 Web Crypto（file:// 也能跑），SHA-256 / HMAC 为内置实现。
+ * 中转主题和密钥与 pc-receiver/server.py、安卓 App 保持一致。
+ */
+(function (root) {
+    'use strict';
+
+    var BASE_URL = 'https://ntfy.sh';
+    var TOPIC = 'mr-02b3dd21a74087aaeae3d751';
+    var SECRET = '4361831104b6bd425cdcf8160bcd8033c29a6371b873b647e77185d126455cfc';
+    var CHUNK_SIZE = 3000;
+    var PREFIX = 'MR2';
+    var AUTO_KEY = 'mr_auto_relay';
+    var DEVICE_ID_KEY = 'mr_device_id_v1';
+    var DEVICE_SECRET_KEY = 'mr_device_secret_v1';
+    var memoryDevice = {};
+
+    /* ====================== SHA-256 ====================== */
+
+    var K = [
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+    ];
+
+    function rotr(x, n) { return ((x >>> n) | (x << (32 - n))) >>> 0; }
+
+    function utf8Bytes(str) {
+        if (typeof TextEncoder !== 'undefined') {
+            return new Uint8Array(new TextEncoder().encode(str));
+        }
+        var s = unescape(encodeURIComponent(str));
+        var out = new Uint8Array(s.length);
+        for (var i = 0; i < s.length; i++) out[i] = s.charCodeAt(i);
+        return out;
+    }
+
+    function concatBytes() {
+        var total = 0, i;
+        for (i = 0; i < arguments.length; i++) total += arguments[i].length;
+        var out = new Uint8Array(total), offset = 0;
+        for (i = 0; i < arguments.length; i++) {
+            out.set(arguments[i], offset);
+            offset += arguments[i].length;
+        }
+        return out;
+    }
+
+    function sha256(bytes) {
+        var paddedLen = (((bytes.length + 1 + 8) + 63) >> 6) << 6;
+        var msg = new Uint8Array(paddedLen);
+        msg.set(bytes);
+        msg[bytes.length] = 0x80;
+        var bitLen = bytes.length * 8;
+        var tail = paddedLen - 8;
+        // 64 位长度：高 32 位为 0（本场景消息远小于 512MB）
+        msg[tail + 4] = (bitLen >>> 24) & 0xff;
+        msg[tail + 5] = (bitLen >>> 16) & 0xff;
+        msg[tail + 6] = (bitLen >>> 8) & 0xff;
+        msg[tail + 7] = bitLen & 0xff;
+
+        var h0 = 0x6a09e667, h1 = 0xbb67ae85, h2 = 0x3c6ef372, h3 = 0xa54ff53a,
+            h4 = 0x510e527f, h5 = 0x9b05688c, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
+        var w = new Int32Array(64), i, j;
+
+        for (i = 0; i < msg.length; i += 64) {
+            for (j = 0; j < 16; j++) {
+                var p = i + j * 4;
+                w[j] = ((msg[p] << 24) | (msg[p + 1] << 16) | (msg[p + 2] << 8) | msg[p + 3]) | 0;
+            }
+            for (j = 16; j < 64; j++) {
+                var s0 = rotr(w[j - 15], 7) ^ rotr(w[j - 15], 18) ^ (w[j - 15] >>> 3);
+                var s1 = rotr(w[j - 2], 17) ^ rotr(w[j - 2], 19) ^ (w[j - 2] >>> 10);
+                w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+            }
+
+            var a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+            for (j = 0; j < 64; j++) {
+                var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+                var ch = (e & f) ^ ((~e) & g);
+                var t1 = (h + S1 + ch + K[j] + w[j]) | 0;
+                var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+                var maj = (a & b) ^ (a & c) ^ (b & c);
+                var t2 = (S0 + maj) | 0;
+                h = g; g = f; f = e; e = (d + t1) | 0;
+                d = c; c = b; b = a; a = (t1 + t2) | 0;
+            }
+            h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0;
+            h4 = (h4 + e) | 0; h5 = (h5 + f) | 0; h6 = (h6 + g) | 0; h7 = (h7 + h) | 0;
+        }
+
+        var out = new Uint8Array(32);
+        [h0, h1, h2, h3, h4, h5, h6, h7].forEach(function (v, idx) {
+            out[idx * 4] = (v >>> 24) & 0xff;
+            out[idx * 4 + 1] = (v >>> 16) & 0xff;
+            out[idx * 4 + 2] = (v >>> 8) & 0xff;
+            out[idx * 4 + 3] = v & 0xff;
+        });
+        return out;
+    }
+
+    function hmacSha256(key, data) {
+        if (key.length > 64) key = sha256(key);
+        var ipad = new Uint8Array(64), opad = new Uint8Array(64);
+        for (var i = 0; i < 64; i++) {
+            var k = i < key.length ? key[i] : 0;
+            ipad[i] = k ^ 0x36;
+            opad[i] = k ^ 0x5c;
+        }
+        return sha256(concatBytes(opad, sha256(concatBytes(ipad, data))));
+    }
+
+    /* ====================== 加密 / 编码 ====================== */
+
+    function intBytes(value) {
+        return new Uint8Array([
+            (value >>> 24) & 0xff, (value >>> 16) & 0xff, (value >>> 8) & 0xff, value & 0xff
+        ]);
+    }
+
+    function randomBytes(size) {
+        var out = new Uint8Array(size);
+        if (root.crypto && root.crypto.getRandomValues) {
+            root.crypto.getRandomValues(out);
+        } else {
+            for (var i = 0; i < size; i++) out[i] = Math.floor(Math.random() * 256);
+        }
+        return out;
+    }
+
+    function bytesToBase64(bytes) {
+        var s = '';
+        for (var i = 0; i < bytes.length; i += 0x8000) {
+            s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+        }
+        return btoa(s);
+    }
+
+    function encrypt(json) {
+        var data = utf8Bytes(json);
+        var master = sha256(utf8Bytes(SECRET));
+        var encKey = hmacSha256(master, utf8Bytes('market-report-enc'));
+        var macKey = hmacSha256(master, utf8Bytes('market-report-mac'));
+        var nonce = randomBytes(16);
+        var cipher = new Uint8Array(data.length);
+        var offset = 0, counter = 0;
+        while (offset < data.length) {
+            var block = hmacSha256(encKey, concatBytes(nonce, intBytes(counter)));
+            var count = Math.min(block.length, data.length - offset);
+            for (var i = 0; i < count; i++) cipher[offset + i] = data[offset + i] ^ block[i];
+            offset += count;
+            counter++;
+        }
+        var tag = hmacSha256(macKey, concatBytes(nonce, cipher)).subarray(0, 16);
+        return bytesToBase64(concatBytes(nonce, tag, cipher));
+    }
+
+    /* ====================== 业务数据 ====================== */
+
+    function buildRows(state) {
+        var rows = [];
+        [['bagged', '袋装'], ['bulk', '散装']].forEach(function (pair) {
+            var items = (state && state[pair[0]]) || [];
+            items.forEach(function (item) {
+                var region = String((item && item.region) || '').trim();
+                if (!region) return;
+                ((item && item.brands) || []).forEach(function (b) {
+                    var brand = String((b && b.name) || '').trim();
+                    var spec = String((b && b.type) || '').trim();
+                    var price = String((b && b.price) || '').trim();
+                    var freight = String((b && b.freight) || '').trim();
+                    if (!brand && !spec) return;
+                    if (!price && !freight) return;
+                    rows.push({
+                        productType: pair[1],
+                        region: region,
+                        brand: brand,
+                        spec: spec,
+                        price: price,
+                        price2: String((b && b.price2) || '').trim(),
+                        freight: freight,
+                        remark: String((b && b.remark) || '').trim()
+                    });
+                });
+            });
+        });
+        return rows;
+    }
+
+    function readDeviceStore(key) {
+        try {
+            var value = localStorage.getItem(key);
+            if (value) return value;
+        } catch (e) { }
+        return memoryDevice[key] || '';
+    }
+
+    function writeDeviceStore(key, value) {
+        memoryDevice[key] = value;
+        try {
+            localStorage.setItem(key, value);
+        } catch (e) { }
+    }
+
+    function createDeviceId() {
+        var hex = randomHex(6).toUpperCase();
+        return 'D-' + hex.slice(0, 4) + '-' + hex.slice(4, 8) + '-' + hex.slice(8, 12);
+    }
+
+    function getDeviceIdentity() {
+        var deviceId = readDeviceStore(DEVICE_ID_KEY);
+        if (!/^[A-Za-z0-9_-]{8,64}$/.test(deviceId)) {
+            deviceId = createDeviceId();
+            writeDeviceStore(DEVICE_ID_KEY, deviceId);
+        }
+        var secret = readDeviceStore(DEVICE_SECRET_KEY);
+        if (!secret || secret.length < 32) {
+            secret = randomHex(32);
+            writeDeviceStore(DEVICE_SECRET_KEY, secret);
+        }
+        var ua = String((root.navigator && root.navigator.userAgent) || '');
+        var platform = 'web';
+        var deviceName = '电脑浏览器';
+        if (/iPhone/i.test(ua)) {
+            platform = 'ios-web';
+            deviceName = 'iPhone · Safari/网页版';
+        } else if (/iPad/i.test(ua)) {
+            platform = 'ios-web';
+            deviceName = 'iPad · Safari/网页版';
+        } else if (/Android/i.test(ua)) {
+            platform = 'android-web';
+            var model = ua.match(/Android[^;]*;\s*([^)]+)/);
+            deviceName = '安卓 · ' + (model ? String(model[1]).trim() : '浏览器');
+        }
+        return {
+            deviceId: deviceId,
+            deviceSecret: secret,
+            deviceName: deviceName,
+            platform: platform,
+            deviceModel: ua.slice(0, 160)
+        };
+    }
+
+    function publicDeviceInfo() {
+        var info = getDeviceIdentity();
+        return {
+            deviceId: info.deviceId,
+            deviceName: info.deviceName,
+            platform: info.platform,
+            deviceModel: info.deviceModel
+        };
+    }
+
+    function buildPayload(state, text) {
+        var rows = buildRows(state);
+        if (!rows.length) throw new Error('没有可发送的有效明细');
+        var device = getDeviceIdentity();
+        return {
+            reportId: Date.now(),
+            salesmanName: String((state && state.salesmanName) || '').trim(),
+            reportDate: String((state && state.reportDate) || '').trim(),
+            submittedAt: Date.now(),
+            appVersion: 'web-2.8.0',
+            deviceId: device.deviceId,
+            deviceSecret: device.deviceSecret,
+            deviceName: device.deviceName,
+            platform: device.platform,
+            deviceModel: device.deviceModel,
+            rows: rows,
+            wechatText: text || (root.MarketReport ? root.MarketReport.buildText(state) : '')
+        };
+    }
+
+    function randomHex(size) {
+        var bytes = randomBytes(size);
+        var s = '';
+        for (var i = 0; i < bytes.length; i++) s += (bytes[i] < 16 ? '0' : '') + bytes[i].toString(16);
+        return s;
+    }
+
+    function isEnabled() {
+        try {
+            var v = localStorage.getItem(AUTO_KEY);
+            return v === null || v === '1';
+        } catch (e) {
+            return true;
+        }
+    }
+
+    function setEnabled(on) {
+        try { localStorage.setItem(AUTO_KEY, on ? '1' : '0'); } catch (e) { }
+    }
+
+    function configure(opts) {
+        opts = opts || {};
+        if (opts.baseUrl) BASE_URL = String(opts.baseUrl).replace(/\/+$/, '');
+        if (opts.topic) TOPIC = String(opts.topic);
+        if (opts.secret) SECRET = String(opts.secret);
+    }
+
+    function send(state, text) {
+        return Promise.resolve().then(function () {
+            var payload = buildPayload(state, text);
+            var json = JSON.stringify(payload);
+            var encrypted = encrypt(json);
+            var chunks = [];
+            for (var i = 0; i < encrypted.length; i += CHUNK_SIZE) {
+                chunks.push(encrypted.slice(i, i + CHUNK_SIZE));
+            }
+            var msgId = String(payload.reportId) + '-' + Date.now().toString(36) + '-' + randomHex(4);
+            var chain = Promise.resolve();
+            chunks.forEach(function (chunk, idx) {
+                chain = chain.then(function () {
+                    var body = PREFIX + '|' + msgId + '|' + (idx + 1) + '|' + chunks.length + '|' + chunk;
+                    return fetch(BASE_URL + '/' + TOPIC, {
+                        method: 'POST',
+                        mode: 'cors',
+                        keepalive: true,
+                        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+                        body: body
+                    }).then(function (res) {
+                        if (!res.ok) throw new Error('网络中转返回 HTTP ' + res.status);
+                    });
+                });
+            });
+            return chain.then(function () { return { chunks: chunks.length }; });
+        });
+    }
+
+    root.MRRelay = {
+        enabled: isEnabled,
+        setEnabled: setEnabled,
+        configure: configure,
+        send: send,
+        buildPayload: buildPayload,
+        deviceInfo: publicDeviceInfo,
+        // 测试用
+        _encrypt: encrypt,
+        _sha256: sha256,
+        _hmac: hmacSha256,
+        _utf8: utf8Bytes
+    };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/**
+ * 业务员端：录入 → 行内校验 → 自动保存草稿 → 一键复制微信文本。
+ * 移动端优先：大按钮、数字键盘、改动即校验、复制前先拦下格式问题。
+ */
+(function () {
+    'use strict';
+
+    var MR = window.MarketReport;
+    var UI = window.MRUI;
+    var Dict = window.MRDict;
+    var Legacy = window.MRLegacy;
+    var $ = UI.$;
+
+    var DRAFT_KEY = 'mr_draft_v2';
+    var LEGACY_DRAFT_KEY = 'marketReportData';
+    var SENT_KEY = 'mr_sent_v1';
+    var REPORTS_KEY = 'mr_reports_v2';
+
+    var legacyReports = [];
+    var legacyDays = [];
+    var lastRevisionDiff = null;
+
+    var state = {
+        salesmanName: '',
+        reportDate: MR.todayStr(),
+        product: 'bagged',
+        bagged: [],
+        bulk: [],
+        carryFrom: ''
+    };
+
+    function dictTypes(product) {
+        if (!Dict) return [];
+        return Dict.types(product);
+    }
+
+    function optsFor(product) {
+        return {
+            isKnownRegion: Dict ? Dict.isKnownRegion : null,
+            isKnownBrand: Dict ? Dict.isKnownBrand : null,
+            isKnownType: Dict ? function (t) { return Dict.isKnownType(product, t); } : null
+        };
+    }
+
+    function issuesFor(product, item, brand) {
+        return MR.validateRow(item, brand, optsFor(product));
+    }
+
+    function allIssues() {
+        var out = [];
+        ['bagged', 'bulk'].forEach(function (p) {
+            (state[p] || []).forEach(function (item, ri) {
+                (item.brands || []).forEach(function (b, bi) {
+                    issuesFor(p, item, b).forEach(function (it) {
+                        out.push({
+                            product: p, rowIndex: ri, brandIndex: bi, field: it.field,
+                            level: it.level, msg: it.msg, region: item.region, brand: b.name
+                        });
+                    });
+                });
+            });
+        });
+        return out;
+    }
+
+    /* ---------------- 数据 ---------------- */
+
+    function normalizeItem(item) {
+        var brands = (item && item.brands ? item.brands : []).map(function (b) {
+            return {
+                name: b.name || '',
+                type: b.type || '',
+                price: b.price === undefined || b.price === null ? '' : String(b.price),
+                price2: b.price2 === undefined || b.price2 === null ? '' : String(b.price2),
+                freight: b.freight === undefined || b.freight === null ? '' : String(b.freight),
+                remark: b.remark || ''
+            };
+        });
+        return { region: (item && (item.region || item.name)) || '', brands: brands };
+    }
+
+    function ensureRows() {
+        ['bagged', 'bulk'].forEach(function (p) {
+            if (!Array.isArray(state[p])) state[p] = [];
+            state[p] = state[p].map(normalizeItem);
+            if (!state[p].length) {
+                state[p] = [{ region: '', brands: [MR.newBrand()] }];
+            }
+        });
+        var cur = state[state.product];
+        if (!cur.length) cur.push({ region: '', brands: [MR.newBrand()] });
+    }
+
+    function loadDraft() {
+        var raw = null;
+        try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) { }
+
+        if (raw) {
+            try {
+                var data = JSON.parse(raw);
+                state.salesmanName = data.salesmanName || '';
+                state.reportDate = MR.normalizeDate(data.reportDate) || MR.todayStr();
+                state.product = data.product === 'bulk' ? 'bulk' : 'bagged';
+                state.bagged = (data.bagged || []).map(normalizeItem);
+                state.bulk = (data.bulk || []).map(normalizeItem);
+            } catch (e) { }
+            applyTodayCarry();
+            return;
+        }
+
+        try {
+            var legacy = localStorage.getItem(LEGACY_DRAFT_KEY);
+            if (legacy) {
+                var old = JSON.parse(legacy);
+                state.salesmanName = old.salesmanName || '';
+                state.reportDate = MR.normalizeDate(old.reportDate) || MR.todayStr();
+                state.product = old.currentProduct === 'bulk' ? 'bulk' : 'bagged';
+                state.bagged = (old.baggedItems || []).map(normalizeItem);
+                state.bulk = (old.bulkItems || []).map(normalizeItem);
+                toastOnce('已导入旧版草稿');
+            }
+        } catch (e) { }
+        applyTodayCarry();
+    }
+
+    function contentCount(rep) {
+        var n = 0;
+        ['bagged', 'bulk'].forEach(function (p) {
+            (rep[p] || []).forEach(function (item) {
+                (item.brands || []).forEach(function (b) {
+                    if (b.name && b.price !== '' && b.price !== undefined && b.price !== null) n += 1;
+                });
+            });
+        });
+        return n;
+    }
+
+    /** 打开即对齐到今天：内容沿用上次，日期切到今天；没内容时退回最近一次发送记录 */
+    function applyTodayCarry() {
+        var today = MR.todayStr();
+        if (contentCount(state)) {
+            var old = MR.normalizeDate(state.reportDate);
+            if (old && old !== today) {
+                state.carryFrom = old;
+                state.reportDate = today;
+            }
+            return;
+        }
+        var hist = sentHistory();
+        for (var i = 0; i < hist.length; i += 1) {
+            var rep = MR.parseOne(hist[i].text || '');
+            if (!rep || MR.isReportEmpty(rep) || !contentCount(rep)) continue;
+            var from = MR.normalizeDate(rep.reportDate) || '';
+            state.bagged = (rep.bagged || []).map(normalizeItem);
+            state.bulk = (rep.bulk || []).map(normalizeItem);
+            state.product = rep.bagged.length && !rep.bulk.length ? 'bagged'
+                : (rep.bulk.length && !rep.bagged.length ? 'bulk' : state.product);
+            state.reportDate = today;
+            state.carryFrom = from && from !== today ? from : '';
+            if (state.carryFrom) toastOnce('已带入上次填写的内容，日期已更新到今天');
+            return;
+        }
+    }
+
+    var saveTimer = null;
+    var storageWarned = false;
+    function saveDraft() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(function () {
+            try {
+                localStorage.setItem(DRAFT_KEY, JSON.stringify(state));
+            } catch (e) {
+                if (!storageWarned) {
+                    storageWarned = true;
+                    UI.toast('本机存储写入失败，草稿可能无法保存', 'error');
+                }
+            }
+        }, 250);
+    }
+
+    var toastShown = {};
+    function toastOnce(msg) {
+        if (toastShown[msg]) return;
+        toastShown[msg] = true;
+        UI.toast(msg);
+    }
+
+    function sentHistory() {
+        try {
+            var list = JSON.parse(localStorage.getItem(SENT_KEY) || '[]');
+            return Array.isArray(list) ? list : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function pushHistory(text) {
+        var list = sentHistory();
+        list.unshift({ t: new Date().toISOString(), text: text });
+        list = list.slice(0, 10);
+        try { localStorage.setItem(SENT_KEY, JSON.stringify(list)); } catch (e) { }
+    }
+
+    /* ---------------- 渲染 ---------------- */
+
+    function typeOptions(selected, product) {
+        var list = dictTypes(product).slice();
+        if (selected && list.indexOf(selected) < 0) list.unshift(selected);
+        return '<option value="">品种</option>' + list.map(function (t) {
+            return '<option value="' + UI.esc(t) + '"' + (t === selected ? ' selected' : '') + '>' + UI.esc(t) + '</option>';
+        }).join('');
+    }
+
+    function issueHtml(list) {
+        if (!list || !list.length) return '';
+        var order = { error: 0, warn: 1, info: 2 };
+        list = list.slice().sort(function (a, b) { return (order[a.level] || 0) - (order[b.level] || 0); });
+        return '<div class="issues">' + list.map(function (i) {
+            return '<div class="issue ' + i.level + '">' + UI.esc(i.msg) + '</div>';
+        }).join('') + '</div>';
+    }
+
+    function fieldClass(list, field) {
+        var hasError = false, hasWarn = false;
+        (list || []).forEach(function (i) {
+            if (i.field !== field) return;
+            if (i.level === 'error') hasError = true;
+            else if (i.level === 'warn') hasWarn = true;
+        });
+        return hasError ? ' bad' : (hasWarn ? ' warn' : '');
+    }
+
+    function brandTemplate(b, ri, bi, total, product) {
+        var issues = issuesFor(product, state[product][ri], b);
+        var level = issues.some(function (i) { return i.level === 'error'; }) ? ' has-error'
+            : (issues.some(function (i) { return i.level === 'warn'; }) ? ' has-warn' : '');
+        return '' +
+            '<div class="brand-card' + level + '" data-ri="' + ri + '" data-bi="' + bi + '">' +
+            '<div class="brand-grid">' +
+            '<label class="field"><span>品种</span><select class="select" data-f="type">' + typeOptions(b.type, product) + '</select></label>' +
+            '<label class="field"><span>品牌</span><input class="input' + fieldClass(issues, 'name') + '" data-f="name" list="brandOptions" placeholder="品牌名" value="' + UI.esc(b.name) + '"></label>' +
+            '<label class="field"><span>价格</span><input class="input' + fieldClass(issues, 'price') + '" data-f="price" type="number" step="0.01" min="0" inputmode="decimal" placeholder="元/吨" value="' + UI.esc(b.price) + '"></label>' +
+            '<label class="field"><span>价格2（区间上限）</span><input class="input' + fieldClass(issues, 'price2') + '" data-f="price2" type="number" step="0.01" min="0" inputmode="decimal" placeholder="可空" value="' + UI.esc(b.price2) + '"></label>' +
+            '<label class="field"><span>运费</span><input class="input' + fieldClass(issues, 'freight') + '" data-f="freight" type="number" step="0.01" min="0" inputmode="decimal" placeholder="元/吨" value="' + UI.esc(b.freight) + '"></label>' +
+            '<label class="field"><span>备注</span><input class="input" data-f="remark" placeholder="如：有返还" value="' + UI.esc(b.remark) + '"></label>' +
+            '</div>' +
+            issueHtml(issues) +
+            (total > 1 ? '<div class="brand-foot"><button type="button" class="link-btn" data-act="del-brand">删除该品牌</button></div>' : '') +
+            '</div>';
+    }
+
+    function regionTemplate(item, ri) {
+        var product = state.product;
+        var brands = item.brands.map(function (b, bi) {
+            return brandTemplate(b, ri, bi, item.brands.length, product);
+        }).join('');
+        var hasContent = item.brands.some(function (b) { return b.name || b.price; });
+        var regionIssues = [];
+        if (hasContent && !String(item.region || '').trim()) {
+            regionIssues.push({ level: 'error', msg: '这块没填地区' });
+        } else if (item.region && Dict && !Dict.isKnownRegion(item.region)) {
+            regionIssues.push({ level: 'warn', msg: '「' + item.region + '」不在地区字典里，管理端可能对不上表格行' });
+        }
+        var regionCls = 'input' + (regionIssues.some(function (i) { return i.level === 'error'; }) ? ' bad'
+            : (regionIssues.length ? ' warn' : ''));
+        return '' +
+            '<div class="region-card' + (regionIssues.some(function (i) { return i.level === 'error'; }) ? ' has-error' : '') + '" data-ri="' + ri + '">' +
+            '<div class="region-head">' +
+            '<input class="' + regionCls + '" data-role="region" data-ri="' + ri + '" list="regionOptions" placeholder="地区，例如：隆尧" value="' + UI.esc(item.region) + '">' +
+            '<button type="button" class="btn-icon" data-act="del-region" data-ri="' + ri + '" title="删除地区">✕</button>' +
+            '</div>' +
+            (regionIssues.length ? issueHtml(regionIssues) : '') +
+            brands +
+            '<button type="button" class="brand-add" data-act="add-brand" data-ri="' + ri + '">＋ 添加品牌</button>' +
+            '</div>';
+    }
+
+    function render() {
+        var list = state[state.product];
+        $('#regionList').innerHTML = list.map(regionTemplate).join('') ||
+            '<div class="empty">还没有地区，点下面的「添加地区」开始</div>';
+        UI.$$('.seg-btn').forEach(function (btn) {
+            btn.classList.toggle('active', btn.dataset.product === state.product);
+        });
+        syncChrome();
+    }
+
+    function countOf(product) {
+        var n = 0;
+        state[product].forEach(function (item) {
+            item.brands.forEach(function (b) { if (b.name && b.price !== '') n += 1; });
+        });
+        return n;
+    }
+
+    var previewDebounce = UI.debounce(updatePreview, 180);
+    function syncChrome() {
+        $('#countBagged').textContent = countOf('bagged');
+        $('#countBulk').textContent = countOf('bulk');
+        var editAgainBtn = $('#editAgainBtn');
+        if (editAgainBtn) editAgainBtn.hidden = true;
+
+        var regions = {};
+        state.bagged.concat(state.bulk).forEach(function (i) { if (i.region) regions[i.region] = 1; });
+        var brands = countOf('bagged') + countOf('bulk');
+        var issues = allIssues();
+        var errors = issues.filter(function (i) { return i.level === 'error'; }).length;
+        var warns = issues.filter(function (i) { return i.level === 'warn'; }).length;
+
+        var meta = Object.keys(regions).length + ' 个地区 · ' + brands + ' 个品牌';
+        if (errors) meta += ' · ' + errors + ' 处需修正';
+        else if (warns) meta += ' · ' + warns + ' 处待确认';
+        $('#footerMeta').textContent = meta;
+        $('#footerMeta').className = 'footer-meta' + (errors ? ' bad' : (warns ? ' warn' : ''));
+
+        var copyBtn = $('#copyBtn');
+        if (errors) {
+            copyBtn.textContent = '先修正 ' + errors + ' 处';
+            copyBtn.classList.add('has-error');
+        } else {
+            copyBtn.textContent = '复制发微信';
+            copyBtn.classList.remove('has-error');
+        }
+        previewDebounce();
+    }
+
+    function updatePreview() {
+        var total = countOf('bagged') + countOf('bulk');
+        $('#preview').textContent = total === 0 ? '暂无数据' : MR.buildText(state);
+    }
+
+    /* ---------------- 交互 ---------------- */
+
+    function revalidateCard(card) {
+        var ri = +card.dataset.ri;
+        var bi = +card.dataset.bi;
+        var product = state.product;
+        var item = state[product][ri];
+        if (!item) return;
+        var brand = item.brands[bi];
+        if (!brand) return;
+        var issues = issuesFor(product, item, brand);
+        // 只更新字段级提示与卡片状态，不动输入框的值，光标不跳
+        var box = card.querySelector('.issues');
+        if (issues.length) {
+            var html = issueHtml(issues);
+            if (box) box.outerHTML = html;
+            else card.appendChild(UI.el ? UI.el(html) : (function () { var d = document.createElement('div'); d.innerHTML = html; return d.firstChild; })());
+        } else if (box) {
+            box.parentNode.removeChild(box);
+        }
+        card.classList.toggle('has-error', issues.some(function (i) { return i.level === 'error'; }));
+        card.classList.toggle('has-warn', !issues.some(function (i) { return i.level === 'error'; }) && issues.length > 0);
+    }
+
+    function bindEvents() {
+        var list = $('#regionList');
+
+        function onEdit(e) {
+            var t = e.target;
+            var card = t.closest && t.closest('.brand-card');
+            var ri = null, bi = null;
+            if (t.dataset.role === 'region') {
+                ri = +t.dataset.ri;
+                state[state.product][ri].region = t.value;
+            } else if (card && t.dataset.f) {
+                ri = +card.dataset.ri;
+                bi = +card.dataset.bi;
+                var brand = state[state.product][ri].brands[bi];
+                if (!brand) return;
+                brand[t.dataset.f] = t.value;
+                revalidateCard(card);
+            } else {
+                return;
+            }
+            saveDraft();
+            syncChrome();
+        }
+
+        list.addEventListener('input', onEdit);
+        list.addEventListener('change', onEdit);
+
+        list.addEventListener('click', function (e) {
+            var act = e.target.dataset.act;
+            if (!act) return;
+            var ri = +e.target.dataset.ri;
+            var card = e.target.closest('.brand-card');
+
+            if (act === 'add-brand') {
+                state[state.product][ri].brands.push(MR.newBrand());
+                render();
+                saveDraft();
+                var cards = UI.$$('.region-card[data-ri="' + ri + '"] .brand-card');
+                if (cards.length) {
+                    var inputs = cards[cards.length - 1].querySelectorAll('input,select');
+                    if (inputs[0]) inputs[0].focus();
+                }
+            } else if (act === 'del-brand' && card) {
+                var bi = +card.dataset.bi;
+                state[state.product][ri].brands.splice(bi, 1);
+                if (!state[state.product][ri].brands.length) state[state.product][ri].brands.push(MR.newBrand());
+                render();
+                saveDraft();
+            } else if (act === 'del-region') {
+                state[state.product].splice(ri, 1);
+                if (!state[state.product].length) state[state.product].push({ region: '', brands: [MR.newBrand()] });
+                render();
+                saveDraft();
+            }
+        });
+
+        $('#productSeg').addEventListener('click', function (e) {
+            var btn = e.target.closest('.seg-btn');
+            if (!btn || btn.dataset.product === state.product) return;
+            state.product = btn.dataset.product;
+            render();
+            saveDraft();
+        });
+
+        $('#salesmanName').addEventListener('input', function (e) {
+            state.salesmanName = e.target.value;
+            saveDraft();
+            syncChrome();
+        });
+
+        $('#reportDate').addEventListener('change', function (e) {
+            state.reportDate = MR.normalizeDate(e.target.value) || MR.todayStr();
+            if (state.carryFrom && state.reportDate !== MR.todayStr()) hideCarry();
+            saveDraft();
+            syncChrome();
+        });
+
+        $('#addRegion').addEventListener('click', function () {
+            state[state.product].push({ region: '', brands: [MR.newBrand()] });
+            render();
+            saveDraft();
+            var inputs = UI.$$('[data-role="region"]');
+            if (inputs.length) inputs[inputs.length - 1].focus();
+        });
+
+        $('#clearAll').addEventListener('click', function () {
+            if (!confirm('确定清空当前所有录入内容吗？已填的地区和品牌都会被清空。')) return;
+            state.bagged = [{ region: '', brands: [MR.newBrand()] }];
+            state.bulk = [{ region: '', brands: [MR.newBrand()] }];
+            render();
+            saveDraft();
+            UI.toast('已清空');
+        });
+
+        $('#loadLast').addEventListener('click', function () {
+            var list = sentHistory();
+            if (!list.length) { UI.toast('还没有发送记录'); return; }
+            var rep = MR.parseOne(list[0].text);
+            if (!rep || MR.isReportEmpty(rep)) { UI.toast('上次记录解析失败', 'error'); return; }
+            if (!confirm('用上次发送的数据覆盖当前录入？（日期保留为今天）')) return;
+            state.bagged = rep.bagged.map(normalizeItem);
+            state.bulk = rep.bulk.map(normalizeItem);
+            state.product = rep.bagged.length && !rep.bulk.length ? 'bagged' : (rep.bulk.length && !rep.bagged.length ? 'bulk' : state.product);
+            state.reportDate = MR.todayStr();
+            $('#reportDate').value = state.reportDate;
+            render();
+            saveDraft();
+            UI.toast('已载入上次数据，改完价格再复制');
+        });
+
+        $('#syncDict').addEventListener('click', showSettings);
+
+        $('#togglePreview').addEventListener('click', function (e) {
+            var box = $('#preview');
+            var hidden = box.style.display === 'none';
+            box.style.display = hidden ? '' : 'none';
+            e.target.textContent = hidden ? '收起' : '展开';
+        });
+
+        $('#historyBtn').addEventListener('click', showHistoryData);
+        $('#compareBtn').addEventListener('click', showCompare);
+        $('#legacyChoose').addEventListener('click', showHistoryData);
+        $('#legacySkip').addEventListener('click', function () { $('#legacyBanner').style.display = 'none'; });
+        $('#carryClose').addEventListener('click', hideCarry);
+        $('#copyBtn').addEventListener('click', doCopy);
+        $('#editAgainBtn').addEventListener('click', editAgain);
+        $('#sheetClose').addEventListener('click', function () { UI.closeSheet('sheetMask'); });
+        $('#sheetMask').addEventListener('click', function (e) {
+            if (e.target.id === 'sheetMask') UI.closeSheet('sheetMask');
+        });
+    }
+
+    /* ---------------- 复制 ---------------- */
+
+    var footerStatusTimer = null;
+
+    /** 底部状态不抢按钮，回到页面还能看到“到微信粘贴” */
+    function setFooterStatus(text, tone, resetAfter) {
+        clearTimeout(footerStatusTimer);
+        var el = $('#footerMeta');
+        el.textContent = text;
+        el.className = 'footer-meta' + (tone ? ' ' + tone : '');
+        if (resetAfter) {
+            footerStatusTimer = setTimeout(function () { syncChrome(); }, resetAfter);
+        }
+    }
+
+    function setCopyBusy(on) {
+        var btn = $('#copyBtn');
+        btn.disabled = !!on;
+        if (on) {
+            btn.textContent = '正在校验…';
+            var editAgainBtn = $('#editAgainBtn');
+            if (editAgainBtn) editAgainBtn.hidden = true;
+        } else {
+            syncChrome();
+        }
+    }
+
+    function showEditAgain(on, warn, changeCount) {
+        var btn = $('#editAgainBtn');
+        if (!btn) return;
+        var badge = $('#editAgainBadge');
+        btn.hidden = !on;
+        btn.classList.toggle('warn', !!warn);
+        if (badge) {
+            var count = Number(changeCount || 0);
+            badge.textContent = count > 99 ? '99+' : String(count);
+            badge.hidden = !on || count <= 0;
+        }
+    }
+
+    function scrollToEditor() {
+        var list = $('#regionList');
+        if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function markEditingAgain() {
+        showEditAgain(false);
+        setFooterStatus('上一版已提交 · 改完再发会覆盖', 'warn', 20000);
+        scrollToEditor();
+    }
+
+    function revisionTag(kind) {
+        return {
+            up: ['涨', 'up'],
+            down: ['跌', 'down'],
+            freight: ['仅运费', 'freight'],
+            added: ['新增', 'added'],
+            missing: ['本次删除', 'missing']
+        }[kind] || ['', ''];
+    }
+
+    function showRevisionSheet(diff) {
+        var toastEl = document.getElementById('toast');
+        if (toastEl) toastEl.className = 'toast';
+        var rows = (diff && diff.rows || []).filter(function (r) { return r.kind !== 'same'; });
+        var html = '<p class="note" style="margin-bottom:8px;">已提交的是上一版，下面是这次改动的明细；再复制一次就会覆盖成最新版。</p>';
+        if (!rows.length) {
+            html += '<div class="empty">和上一版内容一致，没有改动。</div>';
+        } else {
+            html += '<div class="revision-list">' + rows.map(function (r) {
+                var tag = revisionTag(r.kind);
+                var price = r.oldP === null ? '—' : String(r.oldP);
+                var now = r.newP === null ? '—' : String(r.newP);
+                var freight = (r.oldF === null ? '—' : r.oldF);
+                if (r.oldF !== null && r.newF !== null && r.oldF !== r.newF) freight += ' → ' + r.newF;
+                var productLabel = r.product === 'bulk' ? '散装' : '袋装';
+                return '<div class="revision-row">' +
+                    '<div class="revision-main"><b>' + UI.esc(r.region || (r.brand || '')) + ' · ' + UI.esc(r.brand || '') + '</b>' +
+                    '<div class="note">' + (r.type ? UI.esc(r.type) + ' · ' : '') + productLabel + ' · 价格 ' + UI.esc(price + ' → ' + now) + ' · 运费 ' + UI.esc(freight) + '</div></div>' +
+                    '<span class="revision-tag ' + tag[1] + '">' + UI.esc(tag[0]) + '</span>' +
+                    '</div>';
+            }).join('') + '</div>';
+        }
+        showSheet('本次改动（' + rows.length + ' 项）', html, [
+            { text: '去修改', cls: 'primary', onClick: function () {
+                UI.closeSheet('sheetMask');
+                markEditingAgain();
+            } },
+            { text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }
+        ]);
+    }
+
+    function editAgain() {
+        setFooterStatus('上一版已提交 · 改完再发会覆盖', 'warn', 20000);
+        if (lastRevisionDiff && lastRevisionDiff.rows && lastRevisionDiff.rows.some(function (r) { return r.kind !== 'same'; })) {
+            showRevisionSheet(lastRevisionDiff);
+            return;
+        }
+        showEditAgain(false);
+        UI.toast('上一版已提交，改完再复制会自动覆盖', 'warn', 5000);
+        scrollToEditor();
+    }
+
+    function sendWithTimeout(task, ms) {
+        return new Promise(function (resolve) {
+            var finished = false;
+            var timer = setTimeout(function () {
+                if (finished) return;
+                finished = true;
+                resolve({ ok: false, error: new Error('校验超时，电脑暂未确认') });
+            }, ms);
+            task.then(function (value) {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timer);
+                resolve(value);
+            }, function (err) {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timer);
+                resolve({ ok: false, error: err });
+            });
+        });
+    }
+
+    function doCopy() {
+        var name = (state.salesmanName || '').trim();
+        if (!name) {
+            UI.toast('请先填写业务员姓名', 'error');
+            $('#salesmanName').focus();
+            return;
+        }
+        if (countOf('bagged') + countOf('bulk') === 0) {
+            UI.toast('还没有填写价格，无法复制', 'error');
+            return;
+        }
+
+        var issues = allIssues();
+        var errors = issues.filter(function (i) { return i.level === 'error'; });
+        if (errors.length) {
+            showIssueSheet(errors, '有 ' + errors.length + ' 处格式问题，管理员端会解析不出来');
+            UI.toast('先修正 ' + errors.length + ' 处再复制', 'error');
+            return;
+        }
+
+        var text = MR.buildText(state);
+        var warns = issues.filter(function (i) { return i.level === 'warn'; });
+        var relayOn = !!(window.MRRelay && MRRelay.enabled());
+        var previousRep = previousSameDayReport(name);
+        var currentRep = MR.parseOne(text);
+        var revisionRows = (previousRep && currentRep) ? buildDiff(previousRep, currentRep) : [];
+        var revisionCount = changedRows(revisionRows).length;
+        lastRevisionDiff = previousRep ? { rows: revisionRows, count: revisionCount } : null;
+
+        // 复制和网络发送同时开跑，不再先让业务员切去微信，避免后台挂起网络请求
+        setCopyBusy(true);
+        setFooterStatus('正在校验信息…', 'busy');
+        UI.toast('正在校验信息…', '', 0);
+
+        var copyTask = UI.copyText(text).then(function (ok) {
+            if (ok) {
+                pushHistory(text);
+                // 自己也留一份结构化记录，换手机/清缓存之前至少有本机历史可对比
+                absorbReports([{
+                    id: state.reportDate + '|' + name,
+                    salesmanName: name,
+                    reportDate: state.reportDate,
+                    bagged: state.bagged,
+                    bulk: state.bulk,
+                    createTime: new Date().toISOString()
+                }]);
+            }
+            return ok;
+        }).catch(function () { return false; });
+
+        var sendTask = relayOn
+            ? sendWithTimeout(MRRelay.send(state, text).then(function (result) {
+                return { ok: true, result: result };
+            }), 10000)
+            : Promise.resolve({ ok: true, skipped: true });
+
+        Promise.all([copyTask, sendTask]).then(function (out) {
+            var copied = out[0];
+            var sent = out[1];
+            var warnSuffix = warns.length ? '（' + warns.length + ' 处待确认）' : '';
+            setCopyBusy(false);
+
+            if (!copied) {
+                showFallback(text);
+                showEditAgain(false);
+                lastRevisionDiff = null;
+                if (relayOn && sent.ok) {
+                    UI.toast('信息已校验；请手动全选复制后到微信粘贴', 'error', 6000);
+                    setFooterStatus('信息已校验 · 请手动复制', 'bad', 20000);
+                } else {
+                    UI.toast('复制失败，请在上方文本里长按复制', 'error', 6000);
+                    setFooterStatus('复制失败 · 请手动复制', 'bad', 20000);
+                }
+                return;
+            }
+
+            if (!relayOn) {
+                UI.toast('已复制，到微信粘贴' + warnSuffix, warns.length ? 'warn' : 'ok', 5000);
+                setFooterStatus(warns.length ? '已复制 · ' + warns.length + ' 处待确认' : '已复制 · 到微信粘贴', warns.length ? 'warn' : 'ok', 20000);
+                showEditAgain(true, warns.length, revisionCount);
+                return;
+            }
+
+            if (sent.ok) {
+                UI.toast('信息已校验，到微信粘贴' + warnSuffix, warns.length ? 'warn' : 'ok', 6000);
+                setFooterStatus(warns.length ? '已发送 · ' + warns.length + ' 处待确认' : '已校验 · 到微信粘贴', warns.length ? 'warn' : 'ok', 20000);
+                showEditAgain(true, warns.length, revisionCount);
+            } else {
+                var reason = sent.error && sent.error.message ? sent.error.message : '网络异常';
+                UI.toast('信息已复制，但电脑未收到：' + reason + '；可先到微信粘贴，稍后重发', 'error', 7000);
+                setFooterStatus('电脑未收到 · 可先粘贴', 'bad', 20000);
+                showEditAgain(false);
+                lastRevisionDiff = null;
+            }
+        });
+    }
+
+    /** 列出问题，点一条直接跳到对应输入框 */
+    function showIssueSheet(list, title) {
+        var html = '<p class="note" style="margin-bottom:8px;">点任意一条可直接跳到对应的输入框。</p>' +
+            list.map(function (i, idx) {
+                return '<button type="button" class="issue-row ' + i.level + '" data-jump="' + idx + '">' +
+                    '<span class="issue-tag">' + (i.level === 'error' ? '需修正' : '待确认') + '</span>' +
+                    '<span class="issue-text">' + UI.esc((i.region || '未填地区') + ' · ' + (i.brand || '未填品牌') + '：' + i.msg) + '</span>' +
+                    '</button>';
+            }).join('');
+        showSheet(title, html, [{ text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }]);
+        UI.$$('[data-jump]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var item = list[+btn.dataset.jump];
+                jumpTo(item);
+                UI.closeSheet('sheetMask');
+            });
+        });
+    }
+
+    function jumpTo(issue) {
+        if (state.product !== issue.product) {
+            state.product = issue.product;
+            render();
+        }
+        var card = document.querySelector('.region-card[data-ri="' + issue.rowIndex + '"] .brand-card[data-bi="' + issue.brandIndex + '"]');
+        if (!card) return;
+        var field = issue.field === 'region' ? null : card.querySelector('[data-f="' + issue.field + '"]');
+        var target = field || document.querySelector('[data-role="region"][data-ri="' + issue.rowIndex + '"]');
+        if (target) {
+            target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            target.focus();
+        }
+    }
+
+    function showFallback(text) {
+        showSheet('复制文本', '' +
+            '<p class="note" style="margin-bottom:8px;">当前环境不支持自动复制，请点击下方按钮全选后复制。</p>' +
+            '<textarea class="textarea" id="fallbackText" readonly style="min-height:240px;">' + UI.esc(text) + '</textarea>',
+            [{
+                text: '全选并复制', cls: 'primary', onClick: function () {
+                    var ta = document.getElementById('fallbackText');
+                    ta.focus();
+                    ta.select();
+                    try {
+                        var ok = document.execCommand('copy');
+                        UI.toast(ok ? '已复制' : '请长按文本选择复制', ok ? '' : 'error');
+                    } catch (e) {
+                        UI.toast('请长按文本选择复制', 'error');
+                    }
+                }
+            }, { text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }]);
+    }
+
+    function sentRowsHtml() {
+        var list = sentHistory();
+        if (!list.length) return '<div class="empty">还没有发送记录。每次复制都会自动存一条，最多保留 10 条。</div>';
+        return list.map(function (item, i) {
+            var first = (item.text || '').split('\n')[0];
+            return '<div class="card" style="margin:0 0 10px;">' +
+                '<div class="row" style="justify-content:space-between;">' +
+                '<span class="note">' + UI.esc(UI.formatDateTime(item.t)) + '</span>' +
+                '<button class="btn sm ghost" data-hist="' + i + '">复制这条</button>' +
+                '</div>' +
+                '<div class="note" style="color:var(--ink-2);margin-top:4px;">' + UI.esc(first) + '</div>' +
+                '</div>';
+        }).join('');
+    }
+
+    function bindSentRows(list) {
+        UI.$$('[data-hist]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var item = list[+btn.dataset.hist];
+                UI.copyText(item.text).then(function (ok) {
+                    UI.toast(ok ? '已复制' : '复制失败，请手动选择', ok ? '' : 'error');
+                });
+            });
+        });
+    }
+
+    /** 设置：字典同步 + 从微信/文件恢复旧数据 */
+    function showSettings() {
+        var d = Dict ? Dict.get() : null;
+        var dev = (window.MRRelay && MRRelay.deviceInfo) ? MRRelay.deviceInfo() : null;
+        var html = '' +
+            '<div class="group-title">电脑汇总</div>' +
+            '<label class="row" style="justify-content:space-between;gap:12px;">' +
+            '<span>复制后自动同步到电脑</span>' +
+            '<input type="checkbox" id="relayToggle" ' +
+            (window.MRRelay && MRRelay.enabled() ? 'checked' : '') + '>' +
+            '</label>' +
+            '<p class="note" style="margin:4px 0 0;">开启后，点“复制发微信”会同时把当天报价加密发到办公室电脑；' +
+            'iPhone / 安卓浏览器都能用，不需要和电脑在同一网络。</p>' +
+            (dev ? '<div class="group-title" style="margin-top:16px;">设备授权</div>' +
+                '<p class="note" style="margin:4px 0 0;">本机识别码：<b style="user-select:all;">' + dev.deviceId + '</b></p>' +
+                '<div class="row" style="margin-top:6px;"><button type="button" class="btn ghost" id="copyDeviceCode">复制设备码</button></div>' +
+                '<p class="note" style="margin:6px 0 0;">第一次上报后，管理员要在电脑“设备授权”里通过这台手机；' +
+                '换手机或清缓存会生成新识别码，需要重新授权。</p>' : '') +
+            '<div class="group-title" style="margin-top:16px;">字典</div>' +
+            (d ? '<p class="note" style="margin-bottom:8px;">当前字典：' + d.regions.length + ' 个地区 · ' +
+                d.brands.length + ' 个品牌 · ' + d.types.bagged.length + ' 个袋装品种 · ' + d.types.bulk.length + ' 个散装品种。</p>' : '') +
+            '<p class="note" style="margin-bottom:8px;">管理端改过字典后，把导出的 dict.json 内容粘贴到下面，或直接选择文件。</p>' +
+            '<textarea class="textarea" id="dictText" placeholder="粘贴 dict.json 内容"></textarea>' +
+            '<div class="row" style="margin-top:8px;">' +
+            '<button type="button" class="btn ghost" id="dictFileBtn">选择字典文件</button>' +
+            '<input type="file" id="dictFile" accept=".json,application/json" hidden>' +
+            '</div>' +
+            '<div class="group-title" style="margin-top:16px;">从微信粘贴恢复</div>' +
+            '<p class="note" style="margin-bottom:8px;">清过缓存或换了浏览器时，把之前发到微信的那条消息整段复制粘进来，' +
+            '就能识别成可编辑的数据（发过好几天的，可以一次粘多条）。</p>' +
+            '<textarea class="textarea" id="legacyPaste" placeholder="粘贴微信里的市场信息原文"></textarea>' +
+            '<div class="group-title" style="margin-top:16px;">从文件导入</div>' +
+            '<p class="note" style="margin-bottom:8px;">支持旧程序导出的 JSON（数组 / {reports} / 按天存的对象）、' +
+            '旧版本机备份，也支持纯微信文本文件。</p>' +
+            '<div class="row"><button type="button" class="btn ghost" id="legacyFileBtn">选择数据文件</button>' +
+            '<input type="file" id="legacyFile" accept=".json,.txt,application/json,text/plain" hidden></div>';
+
+        showSheet('设置', html, [
+            {
+                text: '识别并恢复', cls: 'primary', onClick: function () {
+                    var box = document.getElementById('legacyPaste');
+                    var text = box ? String(box.value || '').trim() : '';
+                    if (!text) { UI.toast('先把微信里的原文粘到上面', 'error'); return; }
+                    var imported = Legacy ? Legacy.reportsFromText(text) : [];
+                    if (!imported.length) { UI.toast('没认出报价内容，检查是不是完整的「市场信息」原文', 'error'); return; }
+                    absorbReports(imported);
+                    legacyReports = legacyReports.concat(imported);
+                    legacyDays = Legacy.daysOf(legacyReports);
+                    renderLegacyBanner();
+                    var latest = legacyDays[0];
+                    if (!contentCount(state) && latest) applyLegacyDay(latest, true);
+                    UI.closeSheet('sheetMask');
+                    showHistoryData();
+                    UI.toast('已识别 ' + imported.length + ' 条' + (contentCount(state) ? '，可在历史数据里选一天带入' : '，并已带到今天'));
+                }
+            },
+            {
+                text: '合并字典', cls: 'ghost', onClick: function () {
+                    var text = document.getElementById('dictText').value.trim();
+                    if (!text) { UI.toast('先粘贴内容或选文件', 'error'); return; }
+                    var r = Dict.importJSON(text);
+                    UI.toast(r.msg, r.ok ? '' : 'error');
+                    if (r.ok) {
+                        fillDatalists();
+                        render();
+                    }
+                }
+            },
+            { text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }
+        ]);
+
+        var relayToggle = document.getElementById('relayToggle');
+        if (relayToggle && window.MRRelay) {
+            relayToggle.addEventListener('change', function () {
+                MRRelay.setEnabled(!!relayToggle.checked);
+                UI.toast(relayToggle.checked ? '已开启电脑同步' : '已关闭电脑同步');
+            });
+        }
+
+        var copyDeviceBtn = document.getElementById('copyDeviceCode');
+        if (copyDeviceBtn && dev) {
+            copyDeviceBtn.addEventListener('click', function () {
+                UI.copyText(dev.deviceId).then(function (ok) {
+                    UI.toast(ok ? '设备码已复制' : '复制失败，请手动选择', ok ? '' : 'error');
+                });
+            });
+        }
+
+        var fileBtn = document.getElementById('dictFileBtn');
+        var dictInput = document.getElementById('dictFile');
+        if (fileBtn && dictInput) {
+            fileBtn.addEventListener('click', function () { dictInput.click(); });
+            dictInput.addEventListener('change', function () {
+                var f = dictInput.files[0];
+                if (!f) return;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var r = Dict.importJSON(String(reader.result || ''));
+                    UI.toast(r.msg, r.ok ? '' : 'error');
+                    if (r.ok) { fillDatalists(); render(); }
+                };
+                reader.readAsText(f, 'utf-8');
+            });
+        }
+
+        var dataBtn = document.getElementById('legacyFileBtn');
+        var dataInput = document.getElementById('legacyFile');
+        if (dataBtn && dataInput) {
+            dataBtn.addEventListener('click', function () { dataInput.click(); });
+            dataInput.addEventListener('change', function () {
+                var f = dataInput.files[0];
+                if (!f) return;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var imported = Legacy ? Legacy.reportsFromText(String(reader.result || '')) : [];
+                    if (!imported.length) { UI.toast('这个文件里没读到报价数据', 'error'); return; }
+                    absorbReports(imported);
+                    legacyReports = legacyReports.concat(imported);
+                    legacyDays = Legacy.daysOf(legacyReports);
+                    renderLegacyBanner();
+                    if (!contentCount(state) && legacyDays.length) applyLegacyDay(legacyDays[0], true);
+                    UI.closeSheet('sheetMask');
+                    showHistoryData();
+                    UI.toast('已导入 ' + imported.length + ' 条旧数据，可在历史数据里选择带入');
+                };
+                reader.readAsText(f, 'utf-8');
+            });
+        }
+    }
+
+    /* ---------------- 旧版本地数据 ---------------- */
+
+    function historyReports() {
+        try {
+            var list = JSON.parse(localStorage.getItem(REPORTS_KEY) || '[]');
+            return Array.isArray(list) ? list : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function absorbReports(list) {
+        if (!list || !list.length) return 0;
+        var merged = historyReports();
+        var n = 0;
+        list.forEach(function (r) {
+            var clean = MR.sanitize ? MR.sanitize(r) : r;
+            if (!clean || MR.isReportEmpty(clean)) return;
+            merged = MR.upsert(merged, clean).reports;
+            n += 1;
+        });
+        try { localStorage.setItem(REPORTS_KEY, JSON.stringify(merged)); } catch (e) { }
+        return n;
+    }
+
+    function scanLegacy() {
+        if (!Legacy) return;
+        var res = Legacy.scanStorage();
+        if (res.reports.length) {
+            legacyReports = res.reports;
+            legacyDays = res.days;
+            absorbReports(legacyReports);
+            if (!contentCount(state) && legacyDays.length) applyLegacyDay(legacyDays[0], true);
+        }
+        renderLegacyBanner();
+    }
+
+    function applyLegacyDay(day, silent) {
+        var merged = Legacy.mergeDay(day.reports, (state.salesmanName || '').trim());
+        var today = MR.todayStr();
+        if (!state.salesmanName && day.salesmen && day.salesmen.length === 1 && day.salesmen[0] !== '未知') {
+            state.salesmanName = day.salesmen[0];
+        }
+        if (merged.bagged && merged.bagged.length) state.bagged = merged.bagged.map(normalizeItem);
+        if (merged.bulk && merged.bulk.length) state.bulk = merged.bulk.map(normalizeItem);
+        state.product = countOf('bagged') ? 'bagged' : (countOf('bulk') ? 'bulk' : state.product);
+        state.reportDate = today;
+        state.carryFrom = day.date && day.date !== today ? day.date : '';
+        var input = $('#reportDate');
+        if (input) input.value = today;
+        var nameInput = $('#salesmanName');
+        if (nameInput && state.salesmanName) nameInput.value = state.salesmanName;
+        saveDraft();
+        render();
+        showCarry();
+        if (!silent) {
+            UI.toast('已带入 ' + dateLabel(day.date) + ' 的内容，日期已切到今天');
+            UI.closeSheet('sheetMask');
+        }
+    }
+
+    function renderLegacyBanner() {
+        var box = $('#legacyBanner');
+        if (!box) return;
+        if (!legacyDays.length) { box.style.display = 'none'; return; }
+        var latest = legacyDays[0];
+        var names = latest.salesmen.slice(0, 3).join('、');
+        $('#legacyText').textContent = '本机找到 ' + legacyDays.length + ' 天旧版本地数据（最近 ' + dateLabel(latest.date) +
+            (names ? '，' + names : '') + '），已并入本机历史。去「历史数据」挑一天带过来改，日期自动变今天。';
+        box.style.display = '';
+    }
+
+    function legacyRow(day, idx) {
+        return '<div class="card" style="margin:0 0 8px;">' +
+            '<div class="row" style="justify-content:space-between;">' +
+            '<div><b>' + UI.esc(dateLabel(day.date)) + '</b>' +
+            '<div class="note">' + day.reports.length + ' 条 · ' + day.regions + ' 个地区 · ' + day.brands + ' 个品牌' +
+            (day.salesmen.length ? ' · ' + UI.esc(day.salesmen.join('、')) : '') + '</div></div>' +
+            '<button type="button" class="btn sm primary" data-legacy-day="' + idx + '">带入</button>' +
+            '</div></div>';
+    }
+
+    function showHistoryData() {
+        var sent = sentHistory();
+        var days = legacyDays.slice(0, 15);
+        var html = '<p class="note" style="margin-bottom:8px;">最近发送的文本点「复制这条」可直接再发；旧版本机数据点「带入」就把那天的内容带到今天，随便改。' +
+            '要从微信或文件恢复更多，去「设置」。</p>' +
+            '<div class="group-title">最近发送（最近 10 条）</div>' +
+            sentRowsHtml() +
+            '<div class="group-title" style="margin-top:16px;">旧版本地数据（' + legacyDays.length + ' 天）</div>' +
+            (days.length ? days.map(legacyRow).join('') :
+                '<div class="empty">本机没有找到旧版数据，去「设置 → 从微信粘贴恢复 / 从文件导入」。</div>');
+
+        showSheet('历史数据', html, [{ text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }]);
+
+        bindSentRows(sent);
+        UI.$$('[data-legacy-day]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var day = legacyDays[+btn.dataset.legacyDay];
+                if (day) applyLegacyDay(day, false);
+            });
+        });
+    }
+
+    /* ---------------- 与历史对比（日期可自选） ---------------- */
+
+    function numOf(v) {
+        if (v === '' || v === null || v === undefined) return null;
+        var n = Number(v);
+        return isNaN(n) ? null : n;
+    }
+
+    function dateLabel(d) {
+        var m = String(d || '').split('-');
+        if (m.length < 3) return d || '—';
+        return (+m[1]) + '月' + (+m[2]) + '日';
+    }
+
+    function rowsOf(rep) {
+        var map = {};
+        ['bagged', 'bulk'].forEach(function (p) {
+            (rep[p] || []).forEach(function (item) {
+                var region = item.region || item.name || '';
+                (item.brands || []).forEach(function (b) {
+                    if (!b.name) return;
+                    var type = b.type || '';
+                    var k = [region, b.name, type].join('|');
+                    var rec = { region: region, brand: b.name, type: type, product: p, price: numOf(b.price), price2: numOf(b.price2), freight: numOf(b.freight) };
+                    if (!map[k]) map[k] = rec;
+                });
+            });
+        });
+        return map;
+    }
+
+    /** 本机可用的历史报告：本机录入(mr_reports_v2) + 发送记录，按日期取最新一条 */
+    function localHistoryReports() {
+        var out = [];
+        try {
+            var list = JSON.parse(localStorage.getItem('mr_reports_v2') || '[]');
+            (Array.isArray(list) ? list : []).forEach(function (r) {
+                if (!r || !r.reportDate) return;
+                out.push({ date: MR.normalizeDate(r.reportDate), rep: MR.sanitize ? MR.sanitize(r) : r, t: r.createTime || '', src: '本机录入' });
+            });
+        } catch (e) { }
+        sentHistory().forEach(function (h) {
+            var rep = MR.parseOne(h.text || '');
+            if (!rep || MR.isReportEmpty(rep) || !rep.reportDate) return;
+            out.push({ date: MR.normalizeDate(rep.reportDate), rep: rep, t: h.t || '', src: '发送记录' });
+        });
+        var best = {};
+        out.forEach(function (x) {
+            if (!x.date) return;
+            var cur = best[x.date];
+            if (!cur || String(x.t) > String(cur.t)) best[x.date] = x;
+        });
+        return Object.keys(best).map(function (k) { return best[k]; })
+            .sort(function (a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+    }
+
+    function buildDiff(baseRep, currentRep) {
+        var nowRep = currentRep || state;
+        var oldMap = rowsOf(baseRep);
+        var nowMap = rowsOf(nowRep);
+        var keys = Object.keys(oldMap);
+        Object.keys(nowMap).forEach(function (k) { if (!oldMap[k]) keys.push(k); });
+        var rows = [];
+        keys.forEach(function (k) {
+            var o = oldMap[k], n = nowMap[k];
+            var row = { region: (n || o).region, brand: (n || o).brand, type: (n || o).type, product: (n || o).product, oldP: o ? o.price : null, newP: n ? n.price : null, oldF: o ? o.freight : null, newF: n ? n.freight : null };
+            if (!o) row.kind = 'added';
+            else if (!n) row.kind = 'missing';
+            else if (o.price !== null && n.price !== null && o.price !== n.price) row.kind = n.price > o.price ? 'up' : 'down';
+            else if (o.freight !== null && n.freight !== null && o.freight !== n.freight) row.kind = 'freight';
+            else row.kind = 'same';
+            rows.push(row);
+        });
+        var order = { up: 0, down: 1, freight: 2, added: 3, missing: 4, same: 5 };
+        rows.sort(function (a, b) { return (order[a.kind] || 0) - (order[b.kind] || 0) || (a.region > b.region ? 1 : -1); });
+        return rows;
+    }
+
+    /** 今天已提交过同一业务员的上一版，用于发送后做非阻断的改动摘要 */
+    function previousSameDayReport(name) {
+        var hist = localHistoryReports();
+        for (var i = 0; i < hist.length; i += 1) {
+            var rep = hist[i].rep;
+            if (!rep) continue;
+            if (MR.normalizeDate(rep.reportDate) !== MR.normalizeDate(state.reportDate)) continue;
+            if ((rep.salesmanName || '').trim() !== name) continue;
+            if (MR.isReportEmpty(rep) || !contentCount(rep)) continue;
+            return rep;
+        }
+        return null;
+    }
+
+    function changedRows(rows) {
+        return (rows || []).filter(function (r) { return r && r.kind !== 'same'; });
+    }
+
+    function diffHtml(baseRep, baseDate) {
+        var rows = buildDiff(baseRep);
+        var cnt = { up: 0, down: 0, freight: 0, added: 0, missing: 0, same: 0 };
+        rows.forEach(function (r) { cnt[r.kind] += 1; });
+        var changed = cnt.up + cnt.down + cnt.freight + cnt.added + cnt.missing;
+
+        function money(v) { return v === null ? '—' : String(v); }
+        function priceCell(r) {
+            if (r.kind === 'up' || r.kind === 'down') {
+                var d = r.newP - r.oldP;
+                var sign = d > 0 ? '+' : '';
+                return money(r.oldP) + ' → <b>' + money(r.newP) + '</b> <span class="delta-' + (r.kind === 'up' ? 'up' : 'down') + '">' + sign + (Math.round(d * 100) / 100) + '</span>';
+            }
+            return '<span class="' + (r.kind === 'missing' ? 'delta-flat' : '') + '">' + money(r.oldP) + '</span> › ' + money(r.newP);
+        }
+        function tag(kind) {
+            return { up: '涨', down: '跌', freight: '仅运费', added: '新增', missing: '本次未填', same: '没变' }[kind] || '';
+        }
+
+        var head = '<div class="note" style="margin-bottom:8px;">基准：<b>' + UI.esc(dateLabel(baseDate)) + '</b>' +
+            '（' + UI.esc(baseRep.salesmanName || state.salesmanName || '本机记录') + '）。' +
+            (changed ? '<b>' + changed + '</b> 处有变化：涨 ' + cnt.up + ' · 跌 ' + cnt.down + ' · 仅运费 ' + cnt.freight + ' · 新增 ' + cnt.added + ' · 本次未填 ' + cnt.missing
+                : '和基准完全一致，可直接复制发微信') + '。</div>';
+
+        if (!rows.length) return head + '<div class="empty">两边都没有可比的数据</div>';
+
+        var body = rows.map(function (r) {
+            var p = r.product === 'bulk' ? '散' : '袋';
+            return '<tr class="cmp-' + r.kind + '">' +
+                '<td>' + UI.esc(r.region || '未填') + '</td>' +
+                '<td>' + UI.esc(r.brand) + (r.type ? '<div class="note">' + UI.esc(r.type) + p + '</div>' : '<div class="note">' + p + '装</div>') + '</td>' +
+                '<td>' + priceCell(r) + '</td>' +
+                '<td>' + (r.oldF === null ? '—' : r.oldF) + (r.oldF !== null && r.newF !== null && r.oldF !== r.newF ? ' → ' + r.newF : '') + '</td>' +
+                '<td>' + tag(r.kind) + '</td>' +
+                '</tr>';
+        }).join('');
+
+        return head +
+            '<div style="overflow-x:auto;"><table class="cmp-table"><thead><tr><th>地区</th><th>品牌</th><th>价格（基准→本次）</th><th>运费</th><th>变化</th></tr></thead><tbody>' +
+            body + '</tbody></table></div>';
+    }
+
+    function showCompare() {
+        var hist = localHistoryReports().filter(function (x) { return x.date !== state.reportDate; });
+        if (!hist.length) {
+            showSheet('与历史数据对比', '<div class="empty">这台手机上还没有更早的报告记录。<br>本机对比只用「本机录入 + 最近 10 次发送记录」，' +
+                '第一次用或换了手机时没有历史可对比；管理端有全部数据，可到管理端看对比。</div>',
+                [{ text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }]);
+            return;
+        }
+
+        var options = hist.map(function (x) {
+            return '<option value="' + UI.esc(x.date) + '">' + UI.esc(dateLabel(x.date) + '（' + x.src + '）') + '</option>';
+        }).join('');
+        var html = '<div class="row" style="margin-bottom:10px;align-items:center;">' +
+            '<span class="note">对比日期</span>' +
+            '<select class="select" id="cmpDate" style="flex:1;">' + options + '</select>' +
+            '</div><div id="cmpBody"></div>';
+
+        showSheet('与历史数据对比', html, [{ text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }]);
+
+        function paint(date) {
+            var hit = hist.filter(function (x) { return x.date === date; })[0];
+            var box = document.getElementById('cmpBody');
+            if (!box || !hit) return;
+            box.innerHTML = diffHtml(hit.rep, hit.date);
+        }
+
+        var sel = document.getElementById('cmpDate');
+        if (sel) {
+            // 默认选中今天之前最近的一天
+            var today = MR.todayStr();
+            var prefer = hist.filter(function (x) { return x.date < today; })[0] || hist[0];
+            sel.value = prefer.date;
+            sel.addEventListener('change', function () { paint(sel.value); });
+            paint(prefer.date);
+        }
+    }
+
+    /* ---------------- 弹层 ---------------- */
+
+    function showSheet(title, html, buttons) {
+        $('#sheetTitle').textContent = title;
+        $('#sheetContent').innerHTML = html;
+        var foot = $('#sheetFoot');
+        foot.innerHTML = '';
+        (buttons || []).forEach(function (b) {
+            var el = document.createElement('button');
+            el.type = 'button';
+            el.className = 'btn ' + (b.cls || 'ghost');
+            el.textContent = b.text;
+            if (b.cls === 'primary') el.classList.add('primary');
+            foot.appendChild(el);
+            if (b.onClick) el.addEventListener('click', b.onClick);
+        });
+        UI.openSheet('sheetMask');
+    }
+
+    /* ---------------- 初始化 ---------------- */
+
+    function hideCarry() {
+        var box = $('#carryBanner');
+        if (box) box.style.display = 'none';
+    }
+
+    function showCarry() {
+        var box = $('#carryBanner');
+        if (!box || !state.carryFrom) return;
+        $('#carryTitle').textContent = '已自动更新到 ' + dateLabel(state.reportDate);
+        $('#carryText').textContent = '内容沿用了 ' + dateLabel(state.carryFrom) + ' 的填写。价格没变就直接点右下角「复制发微信」；有变化改完再复制。';
+        box.style.display = '';
+    }
+
+    function fillDatalists() {        var regions = Dict ? Dict.regions() : [];
+        var brands = Dict ? Dict.brands() : [];
+        $('#regionOptions').innerHTML = regions.map(function (r) {
+            return '<option value="' + UI.esc(r) + '">';
+        }).join('');
+        $('#brandOptions').innerHTML = brands.map(function (b) {
+            return '<option value="' + UI.esc(b) + '">';
+        }).join('');
+    }
+
+    function init() {
+        loadDraft();
+        scanLegacy();
+        ensureRows();
+        fillDatalists();
+
+        $('#salesmanName').value = state.salesmanName;
+        $('#reportDate').value = state.reportDate || MR.todayStr();
+
+        render();
+        bindEvents();
+        showCarry();
+
+        // 站点上放了 assets/dict.json 就自动用最新字典（file:// 时会静默失败）
+        if (Dict && Dict.tryRemote) {
+            Dict.tryRemote().then(function (changed) {
+                if (changed) { fillDatalists(); render(); }
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+</body>
+</html>
