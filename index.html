@@ -339,6 +339,73 @@ a {
     font-weight: 600;
 }
 
+.field-with-pick {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.field-with-pick .input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.pick-btn {
+    flex: 0 0 auto;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.pick-btn:active {
+    background: var(--brand-soft, #e6f4f1);
+}
+
+.picker-search {
+    margin-bottom: 4px;
+}
+
+.picker-search .input {
+    height: 40px;
+}
+
+.picker-list {
+    max-height: 48vh;
+    overflow: auto;
+    margin-top: 6px;
+    border-top: 1px solid var(--line);
+    -webkit-overflow-scrolling: touch;
+}
+
+.picker-item {
+    display: block;
+    width: 100%;
+    padding: 12px 4px;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    color: var(--ink);
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.picker-item.active {
+    color: var(--brand);
+    font-weight: 700;
+}
+
+.picker-item:active {
+    background: #f2f7f6;
+}
+
 .brand-card {
     position: relative;
     border: 1px solid var(--line);
@@ -1213,6 +1280,576 @@ details.card[open] > summary::after {
 .revision-tag.added { color: var(--brand); background: var(--brand-soft); }
 .revision-tag.missing { color: var(--muted); background: #f1f4f9; }
 
+/* ============================================================
+   管理端界面刷新（2026-11）
+   只作用于 .admin-body，不影响业务员端
+   ============================================================ */
+
+.admin-body {
+    --admin-max: 1280px;
+    --admin-card-border: #dfe7ef;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 88% 4%, rgba(15, 118, 110, .10), transparent 28rem),
+        radial-gradient(circle at 6% 30%, rgba(37, 99, 235, .05), transparent 24rem),
+        #eef3f8;
+}
+
+.admin-body ::selection {
+    background: rgba(15, 118, 110, .18);
+}
+
+.admin-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 34px 20px 30px;
+    background: linear-gradient(118deg, #0b1727 0%, #19384b 48%, #0f766e 118%);
+}
+
+.admin-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(90deg, rgba(0, 0, 0, .62), transparent 72%);
+    pointer-events: none;
+}
+
+.admin-hero::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    top: -190px;
+    right: -70px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(45, 212, 191, .28), transparent 68%);
+    pointer-events: none;
+}
+
+.admin-body .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--admin-max);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    margin: 0 auto;
+}
+
+.hero-copy {
+    min-width: 0;
+}
+
+.hero-kicker {
+    display: inline-block;
+    margin-bottom: 9px;
+    color: #8ee7da;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .16em;
+}
+
+.admin-body .hero h1 {
+    font-size: 29px;
+    line-height: 1.2;
+    letter-spacing: -.6px;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, .18);
+}
+
+.admin-body .hero p {
+    max-width: 760px;
+    margin-top: 9px;
+    color: rgba(235, 246, 250, .72);
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.hero-side {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    padding-bottom: 2px;
+}
+
+.admin-body .hero .hero-tag {
+    margin-top: 0;
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .10);
+    color: #d9f7f2;
+    backdrop-filter: blur(8px);
+}
+
+.admin-body .hero .hero-tag.strong {
+    border-color: transparent;
+    background: #ecfdf5;
+    color: #0f766e;
+    font-weight: 700;
+}
+
+.admin-body .tabs {
+    top: 0;
+    gap: 1px;
+    padding: 9px max(20px, calc((100% - var(--admin-max)) / 2 + 20px)) 9px;
+    border-bottom: 1px solid rgba(207, 216, 227, .78);
+    background: rgba(248, 251, 253, .88);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .045);
+    backdrop-filter: blur(16px) saturate(1.15);
+}
+
+.admin-body .tab {
+    position: relative;
+    padding: 9px 15px;
+    border: 0;
+    border-radius: 10px;
+    color: #5f7187;
+    font-size: 14px;
+    transition: background .16s ease, color .16s ease, box-shadow .16s ease;
+}
+
+.admin-body .tab:hover {
+    background: rgba(15, 118, 110, .07);
+    color: var(--brand-dark);
+}
+
+.admin-body .tab.active {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: 0 5px 12px rgba(15, 118, 110, .22);
+}
+
+.admin-body .tab.active .tab-badge {
+    background: #fff;
+    color: #b42318;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+}
+
+.admin-body .tab:focus-visible,
+.admin-body .btn:focus-visible,
+.admin-body .input:focus-visible,
+.admin-body .select:focus-visible,
+.admin-body .textarea:focus-visible,
+.back-top:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .32);
+    outline-offset: 2px;
+}
+
+.admin-main {
+    max-width: var(--admin-max);
+    padding: 8px 20px 64px;
+}
+
+.admin-body .card {
+    padding: 18px;
+    margin: 14px 0;
+    border: 1px solid var(--admin-card-border);
+    border-radius: 16px;
+    box-shadow: 0 7px 22px rgba(20, 38, 62, .055);
+}
+
+.admin-body .card > .card-head {
+    padding-bottom: 11px;
+    margin-bottom: 13px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.admin-body .card-head h2,
+.admin-body .card-head h3 {
+    font-size: 16px;
+    letter-spacing: -.15px;
+}
+
+.admin-body .card-head .hint {
+    max-width: 68%;
+    line-height: 1.45;
+    text-align: right;
+}
+
+.admin-body .hero,
+.admin-body .card {
+    animation: adminFadeUp .32s ease both;
+}
+
+@keyframes adminFadeUp {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-body .btn {
+    height: 41px;
+    border-radius: 11px;
+    font-size: 14px;
+    transition: transform .14s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.admin-body .btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(20, 38, 62, .10);
+}
+
+.admin-body .btn.primary {
+    background: linear-gradient(135deg, #0f766e 0%, #0b665f 100%);
+    box-shadow: 0 6px 15px rgba(15, 118, 110, .22);
+}
+
+.admin-body .btn.primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #12867c 0%, #0e6b64 100%);
+    box-shadow: 0 7px 18px rgba(15, 118, 110, .28);
+}
+
+.admin-body .btn.ghost:hover:not(:disabled) {
+    border-color: rgba(15, 118, 110, .42);
+    background: #f2fbf8;
+    color: var(--brand-dark);
+}
+
+.admin-body .btn.sm {
+    height: 33px;
+    border-radius: 9px;
+}
+
+.admin-body .input,
+.admin-body .select {
+    height: 42px;
+    border-color: #ccd7e3;
+    border-radius: 11px;
+    transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.admin-body .input:hover,
+.admin-body .select:hover {
+    border-color: #aebdce;
+}
+
+.admin-body .textarea {
+    border-color: #ccd7e3;
+    border-radius: 12px;
+    background: #fcfdff;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, .03);
+}
+
+.admin-body .input:focus,
+.admin-body .select:focus,
+.admin-body .textarea:focus {
+    border-color: var(--brand);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, .11);
+}
+
+.admin-body .field > span {
+    margin-bottom: 5px;
+    color: #63758b;
+    font-weight: 600;
+}
+
+.admin-body .import-grid {
+    align-items: stretch;
+}
+
+.admin-body .side-note {
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbfc 100%);
+}
+
+.admin-body .side-note .preview {
+    border-color: #e2e9f0;
+    background: #f6fafb;
+}
+
+kbd {
+    display: inline-block;
+    min-width: 20px;
+    padding: 1px 5px;
+    border: 1px solid #cbd5e1;
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    background: #f8fafc;
+    color: #475569;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.admin-body .chips {
+    gap: 10px;
+}
+
+.admin-body .stat {
+    min-height: 78px;
+    padding: 13px 14px;
+    border-color: #e0e8f0;
+    border-radius: 12px;
+    background: linear-gradient(155deg, #ffffff 0%, #f6f9fc 100%);
+    box-shadow: 0 3px 10px rgba(20, 38, 62, .035);
+}
+
+.admin-body .stat b {
+    margin-bottom: 4px;
+    font-size: 23px;
+    letter-spacing: -.3px;
+}
+
+.admin-body .stat span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-body .stat.up {
+    border-color: #f4d7d4;
+    background: linear-gradient(155deg, #fff 0%, #fff8f7 100%);
+}
+
+.admin-body .stat.new {
+    border-color: #d9e6fb;
+    background: linear-gradient(155deg, #fff 0%, #f6f9ff 100%);
+}
+
+.admin-body .stat.missing {
+    border-color: #f5e3c4;
+    background: linear-gradient(155deg, #fff 0%, #fffbF3 100%);
+}
+
+.admin-body .table-wrap {
+    border-color: #dfe7ef;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.admin-body table.data th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom-color: #dfe7ef;
+    background: rgba(247, 250, 253, .97);
+    color: #5d7087;
+    backdrop-filter: blur(8px);
+}
+
+.admin-body table.data td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.admin-body table.data tbody tr {
+    transition: background .13s ease;
+}
+
+.admin-body table.data tbody tr:nth-child(even) {
+    background: #fbfdff;
+}
+
+.admin-body table.data tbody tr:hover {
+    background: #f3faf8;
+}
+
+.admin-body .empty {
+    margin: 10px;
+    border: 1px dashed #d8e2ec;
+    border-radius: 12px;
+    background: #fbfdff;
+}
+
+.admin-body .note {
+    color: #687b90;
+}
+
+.admin-body .warn-box {
+    border-radius: 11px;
+}
+
+.admin-body .group-title {
+    padding: 7px 0 7px 11px;
+    border-left-width: 4px;
+    border-radius: 0 8px 8px 0;
+    background: #f5faf9;
+}
+
+.admin-body .device-card {
+    padding: 14px;
+    margin-top: 10px;
+    border: 1px solid #dce5ee;
+    border-radius: 13px;
+    box-shadow: 0 3px 10px rgba(20, 38, 62, .035) !important;
+    transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.admin-body .device-card:hover {
+    border-color: #b7d9d3;
+    box-shadow: 0 7px 18px rgba(15, 118, 110, .09) !important;
+    transform: translateY(-1px);
+}
+
+.admin-body .device-card .badge {
+    padding: 2px 9px;
+}
+
+.admin-body .device-card .input {
+    height: 38px;
+    background: #fbfdff;
+}
+
+.admin-body .status-dot {
+    width: 9px;
+    height: 9px;
+    box-shadow: 0 0 0 4px rgba(107, 124, 147, .08);
+}
+
+.admin-body .status-dot.ok {
+    box-shadow: 0 0 0 4px rgba(11, 138, 75, .10);
+}
+
+.admin-body .notify-card {
+    border-radius: 13px;
+    border-left-width: 4px;
+    box-shadow: 0 14px 38px rgba(15, 23, 42, .18);
+}
+
+.admin-body .notify-stack {
+    right: 20px;
+    bottom: 76px;
+}
+
+.admin-body .toast {
+    bottom: 24px;
+    border-radius: 11px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .22);
+}
+
+.admin-body details.card {
+    overflow: hidden;
+}
+
+.admin-body details.card > summary {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admin-body details.card[open] > summary {
+    padding-bottom: 11px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.back-top {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 30;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, .7);
+    border-radius: 50%;
+    background: rgba(15, 118, 110, .92);
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    box-shadow: 0 8px 22px rgba(15, 118, 110, .28);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity .18s ease, transform .18s ease, background .18s ease;
+}
+
+.back-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.back-top:hover {
+    background: #0b665f;
+}
+
+@media (max-width: 920px) {
+    .admin-body .hero-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .hero-side {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .admin-body .card-head .hint {
+        max-width: 58%;
+    }
+}
+
+@media (max-width: 760px) {
+    .admin-hero {
+        padding: 26px 14px 24px;
+    }
+
+    .admin-body .hero h1 {
+        font-size: 22px;
+    }
+
+    .admin-body .hero p {
+        font-size: 13px;
+    }
+
+    .admin-body .tabs {
+        gap: 2px;
+        padding: 8px 12px;
+    }
+
+    .admin-body .tab {
+        padding: 8px 12px;
+    }
+
+    .admin-main {
+        padding: 4px 12px 48px;
+    }
+
+    .admin-body .card {
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .admin-body .card-head {
+        align-items: flex-start;
+    }
+
+    .admin-body .card-head .hint {
+        max-width: 52%;
+        font-size: 11px;
+    }
+
+    .admin-body .toast {
+        bottom: 84px;
+    }
+
+    .back-top {
+        right: 14px;
+        bottom: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-body *,
+    .admin-body *::before,
+    .admin-body *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -1221,7 +1858,7 @@ details.card[open] > summary::after {
     <div class="hero-inner">
         <h1>水泥市场日报</h1>
         <p>填好价格，一键复制，直接发到微信群</p>
-        <span class="hero-tag">业务员端 v2.9.0 · 签名加密同步到电脑</span>
+        <span class="hero-tag">业务员端 v2.9.0 · iOS 选择修复 · 签名加密同步到电脑</span>
     </div>
 </header>
 
@@ -1636,6 +2273,32 @@ details.card[open] > summary::after {
         return false;
     }
 
+    /** 把「邢台市」「临城县」这类写法收敛到字典里的标准地区名 */
+    function canonicalRegion(name) {
+        var s = String(name || '').trim().replace(/\s+/g, '');
+        if (!s) return '';
+        if (isKnownRegion(s)) return s;
+        var stripped = s.replace(/(市|县|区)$/, '');
+        if (stripped !== s && isKnownRegion(stripped)) return stripped;
+        return s;
+    }
+
+    /** 把「赞皇金隅水泥」这类多余后缀收敛到字典里的标准品牌名 */
+    function canonicalBrand(name) {
+        var s = String(name || '').trim().replace(/\s+/g, '');
+        if (!s) return '';
+        if (isKnownBrand(s)) {
+            var d = get();
+            if (d.brands.indexOf(s) >= 0) return s;
+            for (var i = 0; i < d.brands.length; i++) {
+                if (s.indexOf(d.brands[i]) === 0) return d.brands[i];
+            }
+            var stripped = s.replace(/水泥$/, '');
+            if (stripped !== s && d.brands.indexOf(stripped) >= 0) return stripped;
+        }
+        return s;
+    }
+
     /** 把业务员填写的地区归到竞家表的某一行；归不上返回 null */
     function resolveRow(regionName) {
         var s = String(regionName || '').trim();
@@ -1906,6 +2569,8 @@ details.card[open] > summary::after {
         isKnownRegion: isKnownRegion,
         isKnownBrand: isKnownBrand,
         isKnownType: isKnownType,
+        canonicalRegion: canonicalRegion,
+        canonicalBrand: canonicalBrand,
         resolveRow: resolveRow,
         selfPrices: selfPrices,
         setSelfPrice: setSelfPrice,
@@ -4020,7 +4685,10 @@ details.card[open] > summary::after {
             '<div class="brand-card' + level + '" data-ri="' + ri + '" data-bi="' + bi + '">' +
             '<div class="brand-grid">' +
             '<label class="field"><span>品种</span><select class="select" data-f="type">' + typeOptions(b.type, product) + '</select></label>' +
-            '<label class="field"><span>品牌</span><input class="input' + fieldClass(issues, 'name') + '" data-f="name" list="brandOptions" placeholder="品牌名" value="' + UI.esc(b.name) + '"></label>' +
+            '<div class="field"><span>品牌</span><div class="field-with-pick">' +
+            '<input class="input' + fieldClass(issues, 'name') + '" data-f="name" list="brandOptions" placeholder="品牌名，点右侧选" value="' + UI.esc(b.name) + '">' +
+            '<button type="button" class="pick-btn" data-act="pick-brand" data-ri="' + ri + '" data-bi="' + bi + '">选</button>' +
+            '</div></div>' +
             '<label class="field"><span>价格</span><input class="input' + fieldClass(issues, 'price') + '" data-f="price" type="number" step="0.01" min="0" inputmode="decimal" placeholder="元/吨" value="' + UI.esc(b.price) + '"></label>' +
             '<label class="field"><span>价格2（区间上限）</span><input class="input' + fieldClass(issues, 'price2') + '" data-f="price2" type="number" step="0.01" min="0" inputmode="decimal" placeholder="可空" value="' + UI.esc(b.price2) + '"></label>' +
             '<label class="field"><span>运费</span><input class="input' + fieldClass(issues, 'freight') + '" data-f="freight" type="number" step="0.01" min="0" inputmode="decimal" placeholder="元/吨" value="' + UI.esc(b.freight) + '"></label>' +
@@ -4048,7 +4716,8 @@ details.card[open] > summary::after {
         return '' +
             '<div class="region-card' + (regionIssues.some(function (i) { return i.level === 'error'; }) ? ' has-error' : '') + '" data-ri="' + ri + '">' +
             '<div class="region-head">' +
-            '<input class="' + regionCls + '" data-role="region" data-ri="' + ri + '" list="regionOptions" placeholder="地区，例如：隆尧" value="' + UI.esc(item.region) + '">' +
+            '<input class="' + regionCls + '" data-role="region" data-ri="' + ri + '" list="regionOptions" placeholder="地区，点右侧选" value="' + UI.esc(item.region) + '">' +
+            '<button type="button" class="pick-btn" data-act="pick-region" data-ri="' + ri + '">选</button>' +
             '<button type="button" class="btn-icon" data-act="del-region" data-ri="' + ri + '" title="删除地区">✕</button>' +
             '</div>' +
             (regionIssues.length ? issueHtml(regionIssues) : '') +
@@ -4162,13 +4831,48 @@ details.card[open] > summary::after {
         list.addEventListener('input', onEdit);
         list.addEventListener('change', onEdit);
 
+        function onBlur(e) {
+            var t = e.target;
+            if (!t || !t.dataset) return;
+            var card = t.closest && t.closest('.brand-card');
+            if (t.dataset.role === 'region') {
+                var region = Dict && Dict.canonicalRegion ? Dict.canonicalRegion(t.value) : t.value;
+                if (region !== t.value) {
+                    t.value = region;
+                    state[state.product][+t.dataset.ri].region = region;
+                    saveDraft();
+                    syncChrome();
+                }
+            } else if (card && t.dataset.f === 'name') {
+                var brand = Dict && Dict.canonicalBrand ? Dict.canonicalBrand(t.value) : t.value;
+                if (brand !== t.value) {
+                    t.value = brand;
+                    var item = state[state.product][+card.dataset.ri];
+                    var b = item && item.brands[+card.dataset.bi];
+                    if (b) {
+                        b.name = brand;
+                        revalidateCard(card);
+                        saveDraft();
+                        syncChrome();
+                    }
+                }
+            }
+        }
+
+        // blur 不冒泡，用捕获阶段；只做标准名纠正，不重绘，避免把刚点的“选”按钮冲掉。
+        list.addEventListener('blur', onBlur, true);
+
         list.addEventListener('click', function (e) {
             var act = e.target.dataset.act;
             if (!act) return;
             var ri = +e.target.dataset.ri;
             var card = e.target.closest('.brand-card');
 
-            if (act === 'add-brand') {
+            if (act === 'pick-region') {
+                openPicker('region', ri, null);
+            } else if (act === 'pick-brand' && card) {
+                openPicker('brand', ri, +card.dataset.bi);
+            } else if (act === 'add-brand') {
                 state[state.product][ri].brands.push(MR.newBrand());
                 render();
                 saveDraft();
@@ -4392,7 +5096,33 @@ details.card[open] > summary::after {
         });
     }
 
+    /** 发送前统一收敛一次，防止 iOS 点按钮时输入框没触发 blur，留下“邢台市/临城县”这类非标准写法 */
+    function canonicalizeAll() {
+        var changed = false;
+        ['bagged', 'bulk'].forEach(function (p) {
+            (state[p] || []).forEach(function (item) {
+                var region = Dict && Dict.canonicalRegion ? Dict.canonicalRegion(item.region || '') : (item.region || '');
+                if (region !== (item.region || '')) {
+                    item.region = region;
+                    changed = true;
+                }
+                (item.brands || []).forEach(function (b) {
+                    var brand = Dict && Dict.canonicalBrand ? Dict.canonicalBrand(b.name || '') : (b.name || '');
+                    if (brand !== (b.name || '')) {
+                        b.name = brand;
+                        changed = true;
+                    }
+                });
+            });
+        });
+        if (changed) {
+            render();
+            saveDraft();
+        }
+    }
+
     function doCopy() {
+        canonicalizeAll();
         var name = (state.salesmanName || '').trim();
         if (!name) {
             UI.toast('请先填写业务员姓名', 'error');
@@ -5002,6 +5732,69 @@ details.card[open] > summary::after {
     }
 
     /* ---------------- 弹层 ---------------- */
+
+    /**
+     * iOS Safari 的 datalist 在部分系统版本上不显示下拉（WKWebView 更明显），
+     * 这里给地区和品牌提供可点、可搜的原生弹层，安卓/桌面仍保留手输 + datalist。
+     */
+    function openPicker(kind, ri, bi) {
+        var options = kind === 'region' ? (Dict ? Dict.regions() : []) : (Dict ? Dict.brands() : []);
+        var item = state[state.product][ri];
+        var current = kind === 'region'
+            ? String((item && item.region) || '')
+            : String((item && item.brands && item.brands[bi] && item.brands[bi].name) || '');
+        var title = kind === 'region' ? '选择地区' : '选择品牌';
+        var hint = kind === 'region'
+            ? '点下面的标准地区，管理端就能对上竞家表的行。找不到的才手动填。'
+            : '点下面的标准品牌，接收端和导出表更容易识别。新品牌可直接关掉后手填。';
+        var html = '<p class="note" style="margin:0 0 8px;">' + hint + '</p>' +
+            '<div class="picker-search"><input class="input" id="pickerSearch" placeholder="输入关键词筛选" autocomplete="off" autocorrect="off" autocapitalize="off"></div>' +
+            '<div class="picker-list" id="pickerList"></div>';
+
+        showSheet(title, html, [{ text: '关闭', cls: 'ghost', onClick: function () { UI.closeSheet('sheetMask'); } }]);
+
+        var list = $('#pickerList');
+        var search = $('#pickerSearch');
+        if (!list) return;
+
+        function paint(keyword) {
+            var kw = String(keyword || '').trim();
+            var filtered = kw ? options.filter(function (v) { return String(v).indexOf(kw) >= 0; }) : options;
+            if (!filtered.length) {
+                list.innerHTML = '<p class="note" style="padding:12px 2px;">没有匹配。关掉后可以直接在输入框里手填。</p>';
+                return;
+            }
+            list.innerHTML = filtered.map(function (v) {
+                var active = String(v) === current ? ' active' : '';
+                return '<button type="button" class="picker-item' + active + '" data-pick-value="' + UI.esc(v) + '">' +
+                    UI.esc(v) + '</button>';
+            }).join('');
+        }
+
+        list.addEventListener('click', function (e) {
+            var btn = e.target.closest && e.target.closest('[data-pick-value]');
+            if (!btn) return;
+            var value = btn.dataset.pickValue;
+            var row = state[state.product][ri];
+            if (!row) return;
+            if (kind === 'region') {
+                row.region = value;
+            } else {
+                var brand = row.brands[bi];
+                if (!brand) return;
+                brand.name = value;
+            }
+            UI.closeSheet('sheetMask');
+            render();
+            saveDraft();
+            UI.toast(kind === 'region' ? '已选择地区：' + value : '已选择品牌：' + value);
+        });
+
+        if (search) {
+            search.addEventListener('input', function () { paint(search.value); });
+        }
+        paint('');
+    }
 
     function showSheet(title, html, buttons) {
         $('#sheetTitle').textContent = title;
